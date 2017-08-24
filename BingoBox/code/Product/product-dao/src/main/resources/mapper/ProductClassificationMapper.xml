@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.ProductClassificationDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getProductClassificationById" resultType="ProductClassificationPO">
+        SELECT
+          product_classification_id,
+          classification_code,
+          classification_name,
+          parent_classification_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          product_classification
+        WHERE
+          product_classification_id = #{productClassificationId}
+
+    </select>
+
+    <select id="listProductClassificationByParam" parameterType="ProductClassificationPO" resultType="ProductClassificationPO">
+        SELECT
+          product_classification_id,
+          classification_code,
+          classification_name,
+          parent_classification_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          product_classification
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="productClassificationId != null">
+               AND product_classification_id = #{productClassificationId}
+            </if>
+            <if test="classificationCode != null">
+                AND classification_code = #{classificationCode}
+            </if>
+            <if test="classificationName != null">
+                AND classification_name = #{classificationName}
+            </if>
+            <if test="parentClassificationId != null">
+                AND parent_classification_id = #{parentClassificationId}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="saveProductClassification" parameterType="ProductClassificationPO" useGeneratedKeys="true" keyProperty="ProductClassificationId">
+        INSERT INTO product_classification (
+          classification_code,
+          classification_name,
+          parent_classification_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete)
+        VALUES(
+          #{classificationCode},
+          #{classificationName},
+          #{parentClassificationId},
+          #{createUserId},
+          #{createTime},
+          #{lastUpdateUserId},
+          #{lastUpdateTime},
+          #{isDelete}
+        )
+    </insert>
+
+    <update id="updateProductClassification" parameterType="ProductClassificationPO">
+        UPDATE product_classification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classificationCode != null and classificationCode.length() > 0">
+                classification_code = #{classificationCode},
+            </if>
+            <if test="classificationName != null and classificationName.length() > 0">
+                classification_name = #{classificationName},
+            </if>
+            <if test="parentClassificationId != null">
+                parent_classification_id = #{parentClassificationId},
+            </if>
+            <if test="createUserId != null">
+                create_user_id=#{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id=#{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time=#{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete=#{isDelete},
+            </if>
+        </trim>
+        WHERE
+          product_classification_id = #{productClassificationId}
+    </update>
+
+    <delete id="deleteProductClassification">
+        DELETE FROM product_classification
+        WHERE
+          product_classification_id = #{productClassificationId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.FileDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <insert id="add" useGeneratedKeys="true" parameterType="java.util.List" keyProperty="fileId">
+	    <selectKey resultType="long" keyProperty="fileId" order="AFTER"> 
+			SELECT 
+			LAST_INSERT_ID() 
+		</selectKey> 
+        INSERT INTO file(
+            entity_id,
+            file_class,
+            file_type,
+            file_path,
+            create_time,
+            last_update_time
+        ) VALUES 
+         <foreach collection="list" item="item" index="index" separator="," >  
+           (
+				#{item.entityId},
+				#{item.fileClass},
+				#{item.fileType},
+				#{item.filePath},
+				#{item.createTime},
+				#{item.lastUpdateTime}
+        	)  
+   		 </foreach>  
+    </insert>
+    <update id="update" parameterType="FranchiseePO" >
+		update basedata.file
+ 		<trim prefix="SET" suffixOverrides=",">
+            <if test="entityId != null">
+                entity_id = #{entityId},
+            </if>
+           <if test="fileClass != null">
+                file_class = #{fileClass},
+            </if>
+            <if test="fileType != null">
+                file_type = #{fileType},
+            </if>
+            <if test="filePath != null">
+                file_path = #{filePath},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+        </trim>            
+		 where entity_id = #{franchiseeId}
+	</update>
+</mapper>

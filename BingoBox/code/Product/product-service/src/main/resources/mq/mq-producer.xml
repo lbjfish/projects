@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="producer" class="com.aliyun.openservices.ons.api.bean.ProducerBean"
+          init-method="start" destroy-method="shutdown">
+        <property name="properties">
+            <map>
+                <entry key="ProducerId" value="PID_ProductMsg" /> <!-- PID,请替换 -->
+                <entry key="AccessKey" value="LTAI3Pg061wMNQiv" /> <!-- ACCESS_KEY,请替换 -->
+                <entry key="SecretKey" value="4gvZuHJQ8VKivlOejDAaAqRn7lct0s" /> <!-- SECRET_KEY,请替换 -->
+                <!--
+                环境说明	接入点
+                公共云内网接入（阿里云经典网络/VPC）：
+                华东1、华东2、华北1、华北2、华南1	http://onsaddr-internal.aliyun.com:8080/rocketmq/nsaddr4client-internal
+                公共云公网接入	http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet
+                公共云 Region：亚太东南1	http://ap-southeastaddr-internal.aliyun.com:8080/rocketmq/nsaddr4client-internal
+                金融云 Region：华东1	http://jbponsaddr-internal.aliyun.com:8080/rocketmq/nsaddr4client-internal
+                金融云 Region：华东2、华南1	http://mq4finance-sz.addr.aliyun.com:8080/rocketmq/nsaddr4client-internal
+                -->
+                <entry key="ONSAddr" value="http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

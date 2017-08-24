@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.ProductInstanceDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getProductInstanceById" parameterType="Long" resultType="ProductInstancePO">
+        select
+          product_instance_id,
+          product_id,
+          storage_id,
+          rf_id,
+          is_paid,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        from
+          product_instance
+        WHERE
+          product_instance_id = #{productInstanceId}
+          and is_delete = 0
+
+    </select>
+
+    <select id="listProductInstanceByParam" parameterType="ProductInstancePO" resultType="ProductInstancePO">
+        select
+            product_instance_id,
+            product_id,
+            storage_id,
+            rf_id,
+            is_paid,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        from
+            product_instance
+
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="productInstanceId != null">
+                AND product_instance_id = #{productInstanceId}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="storageId != null">
+                AND storage_id = #{storageId}
+            </if>
+            <if test="rfId != null">
+                AND rf_id = #{rfId}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+            <if test="createTime != null">
+                AND create_time = #{createTime}
+            </if>
+            <if test="lastUpdateUserId != null">
+                AND last_update_user_id = #{lastUpdateUserId}
+            </if>
+            <if test="lastUpdateTime != null">
+                AND last_update_time = #{lastUpdateTime}
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete =#{isDelete}
+                </when>
+                <otherwise>
+                    AND is_delete = 0
+                </otherwise>
+            </choose>
+        </trim>
+
+    </select>
+
+    <select id="listProductInstanceByRfId" resultType="ProductInstancePO">
+        SELECT
+          product_instance_id,
+          product_id,
+          storage_id,
+          rf_id,
+          is_paid,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          product_instance
+        WHERE
+          rf_id in
+          <foreach collection="list" item="item" index="index"
+              open = "(" separator="," close = ")">
+              #{item}
+          </foreach>
+          AND is_paid = 0
+
+    </select>
+
+    <update id="updateProductInstance" parameterType="ProductInstancePO">
+        UPDATE product_instance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="storageId != null">
+                storage_id = #{storageId},
+            </if>
+            <if test="rfId != null">
+                rf_id = #{rfId},
+            </if>
+            <if test="isPaid != null">
+                is_paid = #{isPaid},
+            </if>
+            <if test="createUserId != null">
+                create_user_id=#{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id=#{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time=#{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete=#{isDelete},
+            </if>
+        </trim>
+        WHERE
+        product_instance_id = #{productInstanceId}
+    </update>
+
+    <update id="updateProductInstanceStatus">
+        UPDATE
+          product_instance
+        SET
+          is_paid = #{isPaid}
+        WHERE
+        rf_id in
+        <foreach collection="rfIdList" item="item" index="index"
+                 open = "(" separator="," close = ")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>

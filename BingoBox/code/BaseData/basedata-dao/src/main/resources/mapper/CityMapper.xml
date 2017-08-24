@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.CityDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+
+    <select id="queryCityList" parameterType="CityPO" resultType="CityPO">
+        select
+            city_id,
+            city_name,
+            pinyin,
+            is_active,
+            longitude,
+            latitude,
+            enum_city_setting_flag,
+            create_time,
+            short_pinyin,
+            association_words,
+            first_letter,
+            last_update_time,
+            enum_region_info_level,
+            parent_region_info_id,
+            enum_map_type,
+            internal_name,
+            is_oversea
+        from
+          city
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="cityId != null">
+                AND city_id = #{cityId}
+            </if>
+            <if test="cityName != null">
+                AND city_name = #{cityName}
+            </if>
+            <if test="enumRegionInfoLevel != null">
+                AND enum_region_info_level = #{enumRegionInfoLevel}
+            </if>
+            <if test="parentRegionInfoId != null">
+                AND parent_region_info_id = #{parentRegionInfoId}
+            </if>
+            <if test="isOversea != null">
+                AND is_oversea = #{isOversea}
+            </if>
+            <choose>
+                <when test="isActive != null">
+                    AND is_active =#{isActive}
+                </when>
+                <otherwise>
+                    AND is_active = 0
+                </otherwise>
+            </choose>
+        </trim>
+
+    </select>
+    
+    <select id="queryOverseaCountries" parameterType="CityPO" resultType="CityPO">
+    	
+         <include refid="queryAllColumnFromCity"/>
+          <trim prefix="WHERE" prefixOverrides="AND |OR">
+          	 <if test="cityId != null">
+                AND city_id = #{cityId}
+            </if>
+            <if test="cityName != null">
+                AND city_name = #{cityName}
+            </if>
+            <if test="enumRegionInfoLevel != null">
+                AND enum_region_info_level = #{enumRegionInfoLevel}
+            </if>
+            <if test="parentRegionInfoId != null">
+                AND parent_region_info_id = #{parentRegionInfoId}
+            </if>
+            	
+                AND is_oversea = #{isOversea}
+            <choose>
+                <when test="isActive != null">
+                    AND is_active =#{isActive}
+                </when>
+                <otherwise>
+                    AND is_active = 0
+                </otherwise>
+            </choose>
+          
+          </trim>
+    </select>
+    
+    <select id="queryOne" parameterType="CityPO" resultType="CityPO">
+    	<include refid="queryAllColumnFromCity"/>
+    	<trim prefix="WHERE" prefixOverrides="AND |OR">
+          	 <if test="cityId != null">
+                AND city_id = #{cityId}
+            </if>
+            <if test="cityName != null">
+                AND city_name = #{cityName}
+            </if>
+            <if test="enumRegionInfoLevel != null">
+                AND enum_region_info_level = #{enumRegionInfoLevel}
+            </if>
+            <if test="parentRegionInfoId != null">
+                AND parent_region_info_id = #{parentRegionInfoId}
+            </if>
+            <if test="isOversea != null">
+                AND is_oversea = #{isOversea}
+            </if>
+            <choose>
+                <when test="isActive != null">
+                    AND is_active =#{isActive}
+                </when>
+                <otherwise>
+                    AND is_active = 0
+                </otherwise>
+            </choose>
+          
+          </trim>
+    	
+    </select>
+    
+    <insert id="saveCity" parameterType="CityPO" useGeneratedKeys="true" keyProperty="cityId">
+    	insert into city(
+            city_name,
+            pinyin,
+            is_active,
+            
+            longitude,
+            latitude,
+            enum_city_setting_flag,
+            
+            create_time,
+            short_pinyin,
+            association_words,
+            
+            first_letter,
+            last_update_time,
+            enum_region_info_level,
+            
+            parent_region_info_id,
+            enum_map_type,
+            internal_name,
+            is_oversea
+    	) VALUES(
+    		#{cityName},
+    		#{pinyin},
+    		#{isActive},
+    		
+    		#{longitude},
+    		#{latitude},
+    		#{enumCitySettingFlag},
+    		
+    		#{createTime},
+    		#{shortPinyin},
+    		#{associationWords},
+    		
+    		#{firstLetter},
+    		#{lastUpdateTime},
+    		#{enumRegionInfoLevel},
+    		
+    		#{parentRegionInfoId},
+    		#{enumMapType},
+    		#{internalName},
+    		#{isOversea}
+    	)
+    </insert>
+    
+    <update id="updateCity" parameterType="CityPO">
+    	update city 
+    	<set>
+    		<if test="cityName != null">
+    			city_name = #{cityName},
+    		</if>
+    		<if test="pinyin != null">
+    			pinyin = #{pinyin},
+    		</if>
+    		<if test="isActive != null">
+    			is_active = #{isActive},
+    		</if>
+    		<if test="longitude != null">
+    			longitude = #{longitude},
+    		</if>
+    		<if test="latitude != null">
+    			latitude = #{latitude},
+    		</if>
+    		<if test="enumCitySettingFlag != null">
+    			enum_city_setting_flag = #{enumCitySettingFlag},
+    		</if>
+    		<if test="shortPinyin != null">
+    			short_pinyin = #{shortPinyin},
+    		</if>
+    		<if test="associationWords != null">
+    			association_words = #{associationWords},
+    		</if>
+    		<if test="firstLetter != null">
+    			first_letter = #{firstLetter},
+    		</if>
+    		
+    			last_update_time = #{lastUpdateTime},
+    		
+    		<if test="enumRegionInfoLevel != null">
+    			enum_region_info_level = #{enumRegionInfoLevel},
+    		</if>
+    		
+    		<if test="parentRegionInfoId != null">
+    			parent_region_info_id = #{parentRegionInfoId},
+    		</if>
+    		
+    		<if test="enumMapType != null">
+    			enum_map_type = #{enumMapType},
+    		</if>
+    		<if test="internalName != null">
+    			internal_name = #{internalName},
+    		</if>
+    		<if test="isOversea != null">
+    			is_oversea = #{isOversea},
+    		</if>
+    		
+    	</set>
+    	
+    	where 
+    	city_id = #{cityId}
+    </update>
+    
+    <select id="queryCityByCityId" parameterType="Long" resultType="CityPO">
+    	<include refid="queryAllColumnFromCity"/>
+    	<where>
+    		city_id = #{cityId}
+    	</where>
+    </select>
+    
+    <select id="queryCityListByCities" parameterType="java.util.Set" resultType="CityPO">
+    	<include refid="queryAllColumnFromCity"/>
+    	
+    	<where>
+    		<foreach collection="set" open="city_id in (" close=")" separator="," item="cityId">
+    			#{cityId}
+    		</foreach>
+    	</where>
+    </select>
+    
+    
+    <select id="queryCitySuggest" parameterType="CityPO" resultType="CityPO">
+    	<include refid="queryAllColumnFromCity"/>
+    	 <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="cityName != null">
+    			city_name like "%"#{cityName}"%"
+    		</if>
+    		
+    		<if test="pinyin != null">
+    			OR pinyin like "%"#{pinyin}"%"
+    		</if>
+    		
+    		 <choose>
+                <when test="isActive != null">
+                    AND is_active =#{isActive}
+                </when>
+                <otherwise>
+                    AND is_active = 0
+                </otherwise>
+            </choose>
+    		
+        </trim>
+    </select>
+    
+    
+    
+    
+    
+    <!-- 将查询城市所有字段sql抽成片段 -->
+    <sql id="queryAllColumnFromCity">
+    	 select
+            city_id,
+            city_name,
+            pinyin,
+            is_active,
+            longitude,
+            latitude,
+            enum_city_setting_flag,
+            create_time,
+            short_pinyin,
+            association_words,
+            first_letter,
+            last_update_time,
+            enum_region_info_level,
+            parent_region_info_id,
+            enum_map_type,
+            internal_name,
+            is_oversea
+        from
+          city
+    </sql>
+
+    <select id="list" parameterType="Long" resultType="CityPO">
+        select
+        	city_name,
+	        enum_region_info_level,
+	        parent_region_info_id,
+	        city_id
+	    from
+	        city
+        WHERE 
+        	parent_region_info_id = #{parentRegionInfoId}
+    </select>
+</mapper>

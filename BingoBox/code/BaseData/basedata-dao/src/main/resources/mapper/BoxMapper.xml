@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.BoxDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+
+    <select id="getBoxById" parameterType="Long" resultType="BoxPO">
+        SELECT
+            box_id,
+            box_code,
+            box_name,
+            device_name,
+            province_id,
+            city_id,
+            district_id,
+            address,
+            coordinate_system,
+            longitude,
+            latitude,
+            is_valid,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        FROM
+          box
+        WHERE
+          box_id = #{boxId}
+    </select>
+
+    <select id="listBoxByParam" parameterType="BoxPO" resultType="BoxPO">
+        SELECT
+            box_id,
+            box_code,
+            box_name,
+            device_name,
+            province_id,
+            city_id,
+            district_id,
+            address,
+            coordinate_system,
+            longitude,
+            latitude,
+            is_valid,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        FROM
+          box
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="boxId != null">
+                AND box_id = #{boxId}
+            </if>
+            <if test="boxCode != null">
+                AND box_code = #{boxCode}
+            </if>
+            <if test="boxName != null">
+                AND box_name = #{boxName}
+            </if>
+            <if test="deviceName != null">
+                AND device_name = #{deviceName}
+            </if>
+            <if test="provinceId != null">
+                AND province_id = #{provinceId}
+            </if>
+            <if test="cityId != null">
+                AND city_id = #{cityId}
+            </if>
+            <if test="districtId != null">
+                AND district_id = #{districtId}
+            </if>
+            <if test="address != null">
+                AND address = #{address}
+            </if>
+            <if test="coordinate != null">
+                AND coordinate_system = #{coordinateSystem}
+            </if>
+            <if test="longitude != null">
+                AND longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                AND latitude = #{latitude}
+            </if>
+            <if test="isValid != null">
+                AND is_valid = #{isValid}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+            <if test="createTime != null">
+                AND create_time = #{createTime}
+            </if>
+            <if test="lastUpdateUserId != null">
+                AND last_update_user_id = #{lastUpdateUserId}
+            </if>
+            <if test="lastUpdateTime != null">
+                AND last_update_time = #{lastUpdateTime}
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete =#{isDelete}
+                </when>
+                <otherwise>
+                    AND is_delete = 0
+                </otherwise>
+            </choose>
+        </trim>
+
+    </select>
+    
+    <select id="listBoxFuzzyByBoxCode" parameterType="BoxPO" resultType="BoxPO">
+        SELECT
+            b.box_id,
+            b.box_code,
+            b.box_name,
+            b.device_name,
+            b.province_id,
+            b.city_id,
+            b.district_id,
+            b.address,
+            b.coordinate_system,
+            b.longitude,
+            b.latitude,
+            b.is_valid,
+            b.create_user_id,
+            b.create_time,
+            b.last_update_user_id,
+            b.last_update_time,
+            b.is_delete
+        FROM
+          box b
+        LEFT JOIN franchisee_box_mapping fbm ON fbm.box_id = b.box_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="boxCode != null">
+                b.box_code like CONCAT('%', #{boxCode}, '%')
+            </if>
+            <if test="isBinding != null">
+                <choose>
+                    <when test="isBinding == 1">
+                        AND fbm.franchisee_box_mapping_id IS NOT NULL
+                    </when>
+                    <otherwise>
+                        AND fbm.franchisee_box_mapping_id IS NULL
+                    </otherwise>
+                </choose>
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete =#{isDelete}
+                </when>
+                <otherwise>
+                    AND is_delete = 0
+                </otherwise>
+            </choose>
+        </trim>
+          limit 20
+    </select>
+
+    <select id="listBoxByPage" parameterType="BoxFranchiseePO" resultType="BoxFranchiseePO">
+        SELECT
+            b.box_id,
+            b.box_code,
+            b.box_name,
+            b.device_name,
+            b.province_id,
+            b.city_id,
+            b.district_id,
+            b.address,
+            b.coordinate_system,
+            b.longitude,
+            b.latitude,
+            b.is_valid,
+            b.create_time,
+            f.franchisee_code,
+            f.franchisee_name,
+            fbm.franchisee_box_mapping_id,
+            if(fbm.franchisee_box_mapping_id, 1, 0) AS isBinding
+        FROM
+        box b
+        LEFT JOIN franchisee_box_mapping fbm ON fbm.box_id = b.box_id
+        LEFT JOIN franchisee f ON f.franchisee_id = fbm.franchisee_id
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="provinceId != null">
+                AND b.province_id = #{provinceId}
+            </if>
+            <if test="cityId != null">
+                AND b.city_id = #{cityId}
+            </if>
+            <if test="districtId != null">
+                AND b.district_id = #{districtId}
+            </if>
+            <if test="isValid != null">
+                AND b.is_valid = #{isValid}
+            </if>
+            <if test="isBinding != null">
+                <choose>
+                    <when test="isBinding == 1">
+                        AND fbm.franchisee_box_mapping_id IS NOT NULL
+                    </when>
+                    <otherwise>
+                        AND fbm.franchisee_box_mapping_id IS NULL
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="boxCode != null">
+                AND b.box_code = #{boxCode}
+            </if>
+            <if test="franchiseeCode != null">
+                AND f.franchisee_code = #{franchiseeCode}
+            </if>
+            AND b.is_delete = 0
+            AND f.is_delete = 0
+        </trim>
+        ORDER BY b.create_time DESC
+
+
+    </select>
+
+    <select id="listBoxByFranchiseeId" resultType="BoxPO">
+        SELECT
+            b.box_id,
+            b.box_code,
+            b.box_name,
+            b.device_name,
+            b.province_id,
+            b.city_id,
+            b.district_id,
+            b.address,
+            b.coordinate_system,
+            b.longitude,
+            b.latitude,
+            b.is_valid,
+            b.create_user_id,
+            b.create_time,
+            b.last_update_user_id,
+            b.last_update_time,
+            b.is_delete
+        FROM franchisee_box_mapping fbm
+        LEFT JOIN box b ON fbm.box_id = b.box_id
+        WHERE fbm.franchisee_id = #{franchiseeId}
+        AND b.is_delete = 0
+    </select>
+
+<select id="franchiseeBoxList" resultType="BoxPO">
+        select
+            box_id,
+            box_code,
+            box_name,
+            device_name,
+            province_id,
+            city_id,
+            district_id,
+            address,
+            coordinate_system,
+            longitude,
+            latitude,
+            is_valid,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        from
+          box 
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+        	box_id in(select box_id from franchiseeboxmapping where franchisee_id = #{franchiseeId}) 
+            <if test="boxCode != null">
+                AND box_code = #{boxCode}
+            </if>
+            <if test="provinceId != null">
+                AND province_id = #{provinceId}
+            </if>
+            <if test="cityId != null">
+                AND city_id = #{cityId}
+            </if>
+            <if test="districtId != null">
+                AND district_id = #{districtId}
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete =#{isDelete}
+                </when>
+                <otherwise>
+                    AND is_delete = 0
+                </otherwise>
+            </choose>
+        </trim>
+
+    </select>
+
+    <insert id="saveBox" useGeneratedKeys="true" parameterType="BoxPO" keyProperty="boxId">
+        INSERT INTO box(
+            box_code,
+            box_name,
+            device_name,
+            province_id,
+            city_id,
+            district_id,
+            address,
+            coordinate_system,
+            longitude,
+            latitude,
+            is_valid,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        )VALUES (
+            #{boxCode},
+            #{boxName},
+            #{deviceName},
+            #{provinceId},
+            #{cityId},
+            #{districtId},
+            #{address},
+            #{coordinateSystem},
+            #{longitude},
+            #{latitude},
+            #{isValid},
+            #{createUserId},
+            #{createTime},
+            #{lastUpdateUserId},
+            #{lastUpdateTime},
+            #{isDelete}
+        )
+    </insert>
+
+    <update id="updateBox" parameterType="BoxPO">
+        UPDATE box
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="boxCode != null">
+                box_code = #{boxCode},
+            </if>
+            <if test="boxName != null">
+                box_name = #{boxName},
+            </if>
+            <if test="deviceName != null">
+                device_name = #{deviceName},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="districtId != null">
+                district_id = #{districtId},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="coordinateSystem != null">
+                coordinate_system = #{coordinateSystem},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+            <if test="createUserId != null">
+                create_user_id=#{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id=#{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time=#{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete=#{isDelete},
+            </if>
+        </trim>
+        WHERE
+        box_id = #{boxId}
+    </update>
+
+</mapper>

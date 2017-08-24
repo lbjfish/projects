@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:hsf="http://www.taobao.com/hsf"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.taobao.com/hsf
+        http://www.taobao.com/hsf/hsf.xsd"
+        >
+
+        <!-- <hsf:consumer id="productSnapshotServiceApi" interface="com.bingobox.snapshot.service.api.ProductSnapshotServiceApi" version="1.0-SNAPSHOT" group="hsf-snapshot" ></hsf:consumer>
+
+        <hsf:consumer id="boxServiceApi" interface="com.bingobox.box.service.api.BoxServiceApi" version="1.0-SNAPSHOT" group="hsf-box"></hsf:consumer>
+
+        <hsf:consumer id="productInstanceServiceApi" interface="com.bingobox.box.service.api.ProductInstanceServiceApi" version="1.0-SNAPSHOT" group="hsf-box"></hsf:consumer> -->
+        <hsf:consumer id="codeServiceApi" interface="com.bingobox.common.service.api.CodeServiceApi" version="1.0-SNAPSHOT" group="hsf-common"></hsf:consumer>
+
+</beans>

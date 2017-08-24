@@ -1,0 +1,157 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.bingobox.parent</groupId>
+        <artifactId>bingobox-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    
+    <groupId>com.bingobox.basedata</groupId>
+    <artifactId>BaseData</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    
+    <modules>
+        <module>basedata-web</module>
+        <module>basedata-dao</module>
+        <module>basedata-po</module>
+        <module>basedata-vo</module>
+		<module>basedata-dto</module>
+        <module>basedata-service</module>
+        <module>basedata-service-api</module>
+        <module>basedata-controller</module>
+        <module>basedata-framework</module>
+    </modules>
+    
+    <name>BaseData</name>
+    <url>http://maven.apache.org</url>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault><!--默认启用的是dev环境配置-->
+            </activation>
+            <build>
+                <filters>
+                    <filter>${user.dir}/basedata-web/src/main/resources/profile/env.properties.dev</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>test</id>
+            <build>
+                <filters>
+                    <filter>${user.dir}/basedata-web/src/main/resources/profile/env.properties.test</filter>
+                </filters>
+            </build>
+        </profile>
+        <profile>
+            <id>online</id>
+            <build>
+                <filters>
+                    <filter>${user.dir}/basedata-web/src/main/resources/profile/env.properties.online</filter>
+                </filters>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bingobox.order</groupId>
+            <artifactId>order-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+			<groupId>com.bingobox.framework</groupId>
+			<artifactId>bingobox-framework-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bingobox.common</groupId>
+			<artifactId>common-service-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-datasource</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring Test 相关依赖-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <!-- 日志相关依赖 -->
+        <dependency>
+            <!--实现slf4j接口，并整合，自行依赖logback-core及slf4j-->
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+
+        <!-- Spring 依赖 -->
+
+        <!-- Spring 核心依赖-->
+        <dependency>
+            <!--自行依赖spring-core   spring-beans-->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!-- Spring Web 相关依赖-->
+        <dependency>
+            <!--自行依赖spring-web -->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <!-- 阿里云 MQ-->
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>ons-client</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>BaseData</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>utf8</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- 跳过单元测试插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- true:跳过测试 -->
+                    <skip>true</skip>
+                    <!-- 解决测试乱码问题 -->
+                    <forkMode>once</forkMode>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.ScenarioPriceDetailDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getScenarioPriceDetailById" parameterType="Long" resultType="ScenarioPriceDetailPO">
+        SELECT
+          scenario_price_detail_id,
+          scenario_price_id,
+          product_id,
+          product_scenario_price,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM scenario_price_detail
+        WHERE
+         scenario_price_detail_id = #{scenarioPriceDetailId}
+    </select>
+
+    <select id="listScenarioPriceDetailByParam" parameterType="ScenarioPriceDetailPo" resultType="ScenarioPriceDetailPo">
+        SELECT
+          scenario_price_detail_id,
+          scenario_price_id,
+          product_id,
+          product_scenario_price,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM scenario_price_detail
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="scenarioPriceDetailId != null">
+                AND scenario_price_detail_id = #{scenarioPriceDetailId}
+            </if>
+            <if test="scenarioPriceId != null">
+                AND scenario_price_id = #{scenarioPriceId}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="productScenarioPrice != null">
+                AND product_scenario_price = #{productScenarioPrice}
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete = #{isDelete}
+                </when>
+                <otherwise>
+                    AND id_delete = 0
+                </otherwise>
+            </choose>
+
+        </trim>
+    </select>
+
+    <select id="listScenarioPriceDetailByScenarioPriceIdAndProductId" resultType="ScenarioPriceDetailPO">
+        SELECT
+          scenario_price_detail_id,
+          scenario_price_id,
+          product_id,
+          product_scenario_price,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          scenario_price_detail
+        WHERE
+          product_id in
+          <foreach collection="productIds" index="index" item="item"
+                  open="(" separator="," close=")">
+              #{item}
+          </foreach>
+        and scenario_price_id = #{scenarioPriceId}
+        and is_delete = 0
+    </select>
+
+    <select id="getScenarioPriceDetailByScenarioPriceIdAndProductId" resultType="ScenarioPriceDetailPO">
+        SELECT
+          scenario_price_detail_id,
+          scenario_price_id,
+          product_id,
+          product_scenario_price,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          scenario_price_detail
+        WHERE
+          product_id = #{productId}
+          AND scenario_price_id = #{scenarioPriceId}
+          AND is_delete = 0
+    </select>
+
+    <insert id="saveScenarioPriceDetail" parameterType="ScenarioPriceDetailPO" useGeneratedKeys="true" keyProperty="scenarioPriceDetailId">
+        INSERT INTO scenario_price_detail(
+          scenario_price_id,
+          product_id,
+          product_scenario_price,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        )
+        VALUES (
+          #{scenarioPriceId},
+          #{productId},
+          #{productScenarioPrice},
+          #{createUserId},
+          #{createTime},
+          #{lastUpdateUserId},
+          #{lastUpdateTime},
+          #{isDelete}
+        )
+    </insert>
+
+    <update id="updateScenarioPriceDetail" parameterType="ScenarioPriceDetailPO">
+        UPDATE scenario_price_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scenarioPriceId != null">
+                scenario_price_id = #{scenarioPriceId},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="productScenarioPrice != null">
+                product_scenario_price = #{productScenarioPrice},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id = #{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+        </trim>
+        WHERE
+          scenario_price_detail_id = #{scenarioPriceDetailId}
+    </update>
+
+    <delete id="deleteScenarioPriceDetail" parameterType="Long">
+        DELETE FROM
+          scenario_price_detail
+        WHERE
+          scenario_price_detail_id = #{scenarioPriceDetailId}
+    </delete>
+</mapper>

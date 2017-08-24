@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Product</artifactId>
+        <groupId>com.bingobox.product</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>product-service</artifactId>
+    <name>product-service</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bingobox.order</groupId>
+            <artifactId>order-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.order</groupId>
+            <artifactId>order-service-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.product</groupId>
+            <artifactId>product-dao</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.product</groupId>
+            <artifactId>product-framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.product</groupId>
+            <artifactId>product-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.product</groupId>
+            <artifactId>product-service-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.snapshot</groupId>
+            <artifactId>snapshot-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.snapshot</groupId>
+            <artifactId>snapshot-service-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.basedata</groupId>
+            <artifactId>basedata-service-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-datasource</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-constant</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- 阿里云 EDAS-->
+        <dependency>
+            <groupId>com.alibaba.edas</groupId>
+            <artifactId>edas-sdk</artifactId>
+        </dependency>
+        <!-- hsf 单元测试-->
+        <dependency>
+            <groupId>com.alibaba.hsf</groupId>
+            <artifactId>LightApi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!-- 阿里云 MQ-->
+        <dependency>
+            <groupId>com.aliyun.openservices</groupId>
+            <artifactId>ons-client</artifactId>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <finalName>product-service</finalName>
+    </build>
+</project>

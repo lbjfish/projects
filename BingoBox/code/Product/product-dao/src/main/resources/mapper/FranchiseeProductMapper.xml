@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.FranchiseeProductDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getFranchiseeProduct" resultType="FranchiseeProductPO">
+        SELECT
+          franchisee_product_id,
+          franchisee_id,
+          product_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          franchisee_product
+        WHERE
+          franchisee_product_id = #{franchiseeProductId}
+    </select>
+
+    <select id="listFranchiseeProductByParam" resultType="FranchiseeProductPO">
+        SELECT
+          franchisee_product_id,
+          franchisee_id,
+          product_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          franchisee_product
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="franchiseeProductId != null">
+                AND franchisee_product_id = #{franchiseeProductId}
+            </if>
+            <if test="franchiseeId != null">
+                AND franchisee_id = #{franchiseeId}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id =#{createUserId}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+        </trim>
+    </select>
+
+    <insert id="saveFranchiseeProduct" parameterType="FranchiseeProductPO" useGeneratedKeys="true" keyProperty="franchiseeProductId">
+        INSERT INTO franchisee_product (
+          franchisee_id,
+          product_id,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+          )
+        VALUES (
+          #{franchiseeId},
+          #{productId},
+          #{createUserId},
+          #{createTime},
+          #{lastUpdateUserId},
+          #{lastUpdateTime},
+          #{isDelete}
+          )
+    </insert>
+
+    <update id="updateFranchiseeProduct" parameterType="FranchiseeProductPO">
+        UPDATE franchisee_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="franchiseeId != null">
+                franchisee_id = #{franchiseeId},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id = #{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+        </trim>
+        WHERE
+          franchisee_product_id = #{franchiseeProductId}
+    </update>
+
+    <delete id="deleteFranchiseeProduct">
+        DELETE FROM
+          franchisee_product
+        WHERE
+          franchisee_product_id = #{franchiseeProductId}
+    </delete>
+</mapper>

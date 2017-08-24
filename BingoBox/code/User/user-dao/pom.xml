@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>User</artifactId>
+		<groupId>com.bingobox.user</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>user-dao</artifactId>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-po</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- 数据库相关依赖 -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>c3p0</groupId>
+			<artifactId>c3p0</artifactId>
+		</dependency>
+
+		<!-- DAO框架：MyBatis依赖 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bingobox.framework</groupId>
+			<artifactId>bingobox-framework-datasource</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>qatest</id>
+			<properties>
+				<env>qatest</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>pretest</id>
+			<properties>
+				<env>pretest</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>online</id>
+			<properties>
+				<env>online</env>
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<filters>
+			<filter>${project.basedir}/src/main/filters/env.${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources/</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+</project>

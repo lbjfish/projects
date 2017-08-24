@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<classPathEntry
+		location="D:\Maven Repositories\mysql\mysql-connector-java\5.1.40\mysql-connector-java-5.1.40.jar" />
+	<context id="context">
+		<property name="javaFileEncoding" value="UTF-8" />
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://bingobox-hb-00.mysql.rds.aliyuncs.com:3465/user?useUnicode=true&amp;characterEncoding=utf8"
+			userId="root" password="YmluZ29ib3gyMDE3MDYyMg=="></jdbcConnection>
+
+		<javaModelGenerator targetPackage="com.bingobox.user.po"
+			targetProject="user-dao">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+		<sqlMapGenerator targetPackage="com.bingobox.user.dao"
+			targetProject="user-dao">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+		<javaClientGenerator targetPackage="com.bingobox.user.dao"
+			targetProject="user-dao" type="XMLMAPPER" />
+
+
+			
+			<table tableName="user_system_ref" domainObjectName="UserSystemRef"
+			enableCountByExample="false" enableUpdateByExample="false"
+			enableDeleteByExample="false" enableSelectByExample="false"
+			selectByExampleQueryId="false" />
+		
+
+
+
+	</context>
+</generatorConfiguration>

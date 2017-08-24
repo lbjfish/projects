@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>BaseData</artifactId>
+        <groupId>com.bingobox.basedata</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>basedata-controller</artifactId>
+    <name>basedata-controller</name>
+    <url>http://maven.apache.org</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bingobox.basedata</groupId>
+            <artifactId>basedata-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.basedata</groupId>
+            <artifactId>basedata-vo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-constant</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.framework</groupId>
+            <artifactId>bingobox-framework-redis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bingobox.user</groupId>
+            <artifactId>user-dto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- Spring Web 相关依赖-->
+        <dependency>
+            <!--自行依赖spring-web -->
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>basedata-controller</finalName>
+    </build>
+</project>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.FranchiseeContactDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    
+    <insert id="add" parameterType="FranchiseeContactPO" useGeneratedKeys="true" keyProperty="franchiseeContactId">
+		insert into franchisee_contact(
+			franchisee_id,
+			contact_name, 
+			contact_phone, 
+			contact_email, 
+			address,
+			create_time,
+			last_update_time
+		)
+		values(
+			#{franchiseeId},
+			#{contactName},
+			#{contactPhone},
+			#{contactEmail},
+			#{address}, 
+			#{createTime},
+			#{lastUpdateTime}
+		)
+	</insert>
+	<update id="update" parameterType="FranchiseeContactPO" >
+		update basedata.franchisee_contact
+		<trim prefix="SET" suffixOverrides=",">
+            <if test="contactName != null">
+                contact_name = #{contactName},
+            </if>
+           <if test="contactPhone != null">
+                contact_phone = #{contactPhone},
+            </if>
+            <if test="contactEmail != null">
+                contact_email = #{contactEmail},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+        </trim>
+		where franchisee_id = #{franchiseeId}
+		
+	</update>
+</mapper>

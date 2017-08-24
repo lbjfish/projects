@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.FranchiseeDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    
+	<resultMap type="com.bingobox.basedata.po.FranchiseePO" id="FranchiseePOResultMap">
+		<id property="franchiseeId" column="franchisee_id"/>
+		<result property="franchiseeCode" column="franchisee_code"/>
+		<result property="franchiseeName" column="franchisee_name"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="createTime" column="create_time"/>
+		<result property="lastUpdateTime" column="last_update_time"/>
+		<result property="boxCount" column="box_count"/>
+		<result property="provinceName" column="province_name"/>
+		<result property="cityName" column="city_name"/>
+		<result property="districtName" column="district_name"/>
+		<result property="createUserName" column="create_user_name"/>
+		<result property="provinceId" column="province_id"/>
+		<result property="cityId" column="city_id"/>
+		<result property="districtId" column="district_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<association property="franchiseeContact" javaType="com.bingobox.basedata.po.FranchiseeContactPO">
+			<id property="franchiseeContactId" column="franchisee_contact_id"/>
+			<result property="franchiseeId" column="franchisee_id"/>
+			<result property="contactName" column="contact_name"/>
+			<result property="contactPhone" column="contact_phone"/>
+			<result property="address" column="address"/>
+		</association>
+	</resultMap>
+
+    <select id="getFranchisee" parameterType="Long" resultType="FranchiseePO">
+        select
+        franchisee_name,
+        is_delete
+        from
+        franchisee
+        WHERE franchisee_id = #{franchiseeId}
+    </select>
+    <select id="detail" parameterType="Long" resultMap="FranchiseePOResultMap">
+        select
+        f.franchisee_code,
+        f.franchisee_name,
+        f.province_id, 
+        f.city_id, 
+        f.district_id, 
+        f.create_user_id, 
+        f.is_valid,
+        f.create_user_name, 
+        fc.contact_name, 
+        fc.contact_phone, 
+        fc.contact_email,
+        fc.address,
+        f.is_delete,
+        f.create_time,
+        f.last_update_time
+        from
+        franchisee f left join franchisee_contact fc on f.franchisee_id = fc.franchisee_id 
+        WHERE f.franchisee_id = #{franchiseeId} and  f.is_delete = 0
+    </select>
+    <select id="getList" parameterType="FranchiseePO" resultMap="FranchiseePOResultMap">
+        select
+        f.franchisee_id,
+        f.franchisee_code,
+        f.franchisee_name,
+        f.is_valid,
+        f.create_time,
+        f.create_user_name,
+        fc.franchisee_id,
+        fc.contact_name,
+        fc.contact_phone,
+        fc.address,
+        (SELECT COUNT(*) FROM franchisee_box_mapping  WHERE franchisee_id = f.`franchisee_id`) AS box_count,
+        (SELECT city_name FROM city WHERE city_id=f.province_id) AS province_name,
+        (SELECT city_name FROM city WHERE city_id=f.city_id) AS city_name,
+        (SELECT city_name FROM city WHERE city_id=f.district_id) AS district_name
+        from
+        franchisee f left join franchisee_contact fc on f.franchisee_id = fc.franchisee_id 
+        <trim prefix="WHERE" prefixOverrides="AND | OR">
+         	f.is_delete = 0
+            <if test="franchiseeCode != null">
+                and f.franchisee_code like CONCAT(CONCAT('%', #{franchiseeCode}), '%')
+            </if>
+            <if test="franchiseeName != null">
+                and f.franchisee_name like CONCAT(CONCAT('%', #{franchiseeName}), '%')
+            </if>
+            <if test="isValid != null">
+                and f.is_valid = #{isValid}
+            </if>
+        </trim>
+        order by f.franchisee_id desc
+    </select>
+    <insert id="add" parameterType="FranchiseePO" useGeneratedKeys="true" keyProperty="franchiseeId">
+		INSERT INTO franchisee 
+		<trim prefix="SET" suffixOverrides=",">
+            <if test="franchiseeName != null">
+                franchisee_name = #{franchiseeName},
+            </if>
+           <if test="franchiseeCode != null">
+                franchisee_code = #{franchiseeCode},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="districtId != null">
+                district_id = #{districtId},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createUserName != null">
+                create_user_name = #{createUserName},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </trim>            
+	</insert >
+	<update id="update" parameterType="FranchiseePO" >
+		update basedata.franchisee
+ 		<trim prefix="SET" suffixOverrides=",">
+            <if test="franchiseeName != null">
+                franchisee_name = #{franchiseeName},
+            </if>
+           <if test="franchiseeCode != null">
+                franchisee_code = #{franchiseeCode},
+            </if>
+            <if test="provinceId != null">
+                province_id = #{provinceId},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId},
+            </if>
+            <if test="districtId != null">
+                district_id = #{districtId},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createUserName != null">
+                create_user_name = #{createUserName},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+        </trim>            
+		 where franchisee_id = #{franchiseeId}
+	</update>
+</mapper>

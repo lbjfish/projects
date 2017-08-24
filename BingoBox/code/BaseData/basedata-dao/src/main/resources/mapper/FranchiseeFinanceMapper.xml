@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.basedata.dao.FranchiseeFinanceDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+	<resultMap type="com.bingobox.basedata.po.FranchiseeFinancePO" id="FranchiseeFinancePOResultMap">
+		<id property="franchiseeId" column="franchisee_id"/>
+		<result property="beneficiaryCompanyName" column="beneficiary_company_name"/>
+		<result property="businessLicenceNumber" column="business_licence_number"/>
+		<result property="beneficiaryBankName" column="beneficiary_bank_name"/>
+		<result property="beneficiaryBankAddress" column="beneficiary_bank_address"/>
+		<result property="beneficiaryBankAccount" column="beneficiary_bank_account"/>
+		<result property="invoiceCompanyName" column="invoice_company_name"/>
+		<result property="taxpayerRegistrationNumber" column="taxpayer_registration_number"/>
+		<result property="companyAddress" column="company_address"/>
+		<result property="invoiceBankName" column="invoice_bank_name"/>
+		<result property="invoiceBankAddress" column="invoice_bank_address"/>
+		<result property="beneficiaryBankName" column="beneficiary_bank_name"/>
+		<result property="beneficiaryBankAddress" column="beneficiary_bank_address"/>
+		<result property="invoiceBankAccount" column="invoice_bank_account"/>
+		<result property="invoiceBankPhone" column="invoice_bank_phone"/>
+		<result property="settlementType" column="settlement_type"/>
+		<result property="settlementDate" column="settlement_date"/>
+		<collection property="file" ofType="com.bingobox.basedata.po.FilePO">
+			<id property="fileId" column="file_id"/>
+			<result property="entityId" column="entity_id"/>
+			<result property="fileClass" column="file_class"/>
+			<result property="fileType" column="file_type"/>
+			<result property="filePath" column="file_path"/>
+			<result property="createTime" column="create_time"/>
+			<result property="lastUpdateTime" column="last_update_time"/>
+		</collection>        
+	</resultMap>
+	<select id="detail" parameterType="Long" resultMap="FranchiseeFinancePOResultMap">
+		select 
+			ff.franchisee_id,
+			ff.beneficiary_company_name, 
+			ff.business_licence_number, 
+			ff.beneficiary_bank_name, 
+			ff.beneficiary_bank_address, 
+			ff.beneficiary_bank_account, 
+			ff.invoice_company_name, 
+			ff.taxpayer_registration_number, 
+			ff.company_address, 
+			ff.invoice_bank_name, 
+			ff.invoice_bank_address, 
+			ff.invoice_bank_account, 
+			ff.invoice_bank_phone,
+			ff.settlement_type,
+			ff.settlement_date,
+			file.file_id,
+			file.entity_id,
+			file.file_class,
+			file.file_type,
+			file.file_path,
+			file.create_time,
+			file.last_update_time 
+		from 
+			franchisee_finance ff 
+		inner join franchisee f 
+			on ff.franchisee_id = f.franchisee_id 
+		left join (
+				SELECT 
+					file.file_id,
+					file.entity_id,
+					file.file_class,
+					file.file_type,
+					file.file_path,
+					file.create_time,
+					file.last_update_time 
+				FROM 
+					FILE 
+				WHERE file.is_delete = 0 and file.entity_id = #{franchiseeId} and file.file_class = 1) 
+		AS file on file.entity_id = ff.franchisee_id
+		where 
+			ff.franchisee_id = #{franchiseeId}
+	</select>	    
+    <insert id="add" parameterType="FranchiseeFinancePO" useGeneratedKeys="true" keyProperty="franchiseeFinanceId">
+		insert into franchisee_finance
+		 <trim prefix="SET" suffixOverrides=",">
+		 	<if test="franchiseeId != null">
+                franchisee_id = #{franchiseeId},
+            </if>
+            <if test="beneficiaryCompanyName != null">
+                beneficiary_company_name = #{beneficiaryCompanyName},
+            </if>
+           <if test="businessLicenceNumber != null">
+                business_licence_number = #{businessLicenceNumber},
+            </if>
+            <if test="beneficiaryBankName != null">
+                beneficiary_bank_name = #{beneficiaryBankName},
+            </if>
+            <if test="beneficiaryBankAddress != null">
+                beneficiary_bank_address = #{beneficiaryBankAddress},
+            </if>
+            <if test="beneficiaryBankAccount != null">
+                beneficiary_bank_account = #{beneficiaryBankAccount},
+            </if>
+            <if test="invoiceCompanyName != null">
+                invoice_company_name = #{invoiceCompanyName},
+            </if>
+            <if test="taxpayerRegistrationNumber != null">
+                taxpayer_registration_number = #{taxpayerRegistrationNumber},
+            </if>
+            <if test="companyAddress != null">
+                company_address = #{companyAddress},
+            </if>
+            <if test="invoiceBankName != null">
+                invoice_bank_name = #{invoiceBankName},
+            </if>
+            <if test="invoiceBankAddress != null">
+                invoice_bank_address = #{invoiceBankAddress},
+            </if>
+            <if test="invoiceBankAccount != null">
+                invoice_bank_account = #{invoiceBankAccount},
+            </if>
+            <if test="invoiceBankPhone != null">
+                invoice_bank_phone = #{invoiceBankPhone},
+            </if>
+            <if test="settlementType != null">
+                settlement_type = #{settlementType},
+            </if>
+            <if test="settlementDate != null">
+                settlement_date = #{settlementDate},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time = #{lastUpdateTime},
+            </if>
+        </trim>  
+	</insert>
+
+	<update id="update" parameterType="FranchiseeFinancePO" >
+		update basedata.franchisee_finance
+ 		<trim prefix="SET" suffixOverrides=",">
+            <if test="beneficiaryCompanyName != null">
+                beneficiary_company_name = #{beneficiaryCompanyName},
+            </if>
+           <if test="businessLicenceNumber != null">
+                business_licence_number = #{businessLicenceNumber},
+            </if>
+            <if test="beneficiaryBankName != null">
+                beneficiary_bank_name = #{beneficiaryBankName},
+            </if>
+            <if test="beneficiaryBankAddress != null">
+                beneficiary_bank_address = #{beneficiaryBankAddress},
+            </if>
+            <if test="beneficiaryBankAccount != null">
+                beneficiary_bank_account = #{beneficiaryBankAccount},
+            </if>
+            <if test="invoiceCompanyName != null">
+                invoice_company_name = #{invoiceCompanyName},
+            </if>
+            <if test="taxpayerRegistrationNumber != null">
+                taxpayer_registration_number = #{taxpayerRegistrationNumber},
+            </if>
+            <if test="companyAddress != null">
+                company_address = #{companyAddress},
+            </if>
+            <if test="invoiceBankName != null">
+                invoice_bank_name = #{invoiceBankName},
+            </if>
+            <if test="invoiceBankAddress != null">
+                invoice_bank_address = #{invoiceBankAddress},
+            </if>
+            <if test="invoiceBankAccount != null">
+                invoice_bank_account = #{invoiceBankAccount},
+            </if>
+            <if test="invoiceBankPhone != null">
+                invoice_bank_phone = #{invoiceBankPhone},
+            </if>
+            <if test="settlementType != null">
+                settlement_type = #{settlementType},
+            </if>
+            <if test="settlementDate != null">
+                settlement_date = #{settlementDate},
+            </if>
+        </trim>            
+		 where franchisee_id = #{franchiseeId}
+	</update>
+</mapper>

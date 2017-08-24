@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<artifactId>User</artifactId>
+		<groupId>com.bingobox.user</groupId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>user-service</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-service-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-dao</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-po</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-dto</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.bingobox.user</groupId>
+			<artifactId>user-framework</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.bingobox.common</groupId>
+			<artifactId>common-dto</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.bingobox.common</groupId>
+			<artifactId>common-service-api</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<!-- 阿里云 EDAS -->
+		<dependency>
+			<groupId>com.alibaba.edas</groupId>
+			<artifactId>edas-sdk</artifactId>
+		</dependency>
+		<!-- 阿里云 MQ -->
+		<dependency>
+			<groupId>com.aliyun.openservices</groupId>
+			<artifactId>ons-client</artifactId>
+		</dependency>
+
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>qatest</id>
+			<properties>
+				<env>qatest</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>pretest</id>
+			<properties>
+				<env>pretest</env>
+			</properties>
+		</profile>
+		<profile>
+			<id>online</id>
+			<properties>
+				<env>online</env>
+			</properties>
+		</profile>
+	</profiles>
+	<build>
+		<filters>
+			<filter>${project.basedir}/src/main/filters/env.${env}.properties</filter>
+		</filters>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources/</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+	</build>
+</project>

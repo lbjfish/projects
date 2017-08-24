@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.BoxInventoryDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getBoxInventoryById" parameterType="Long" resultType="BoxInventoryPO">
+        select
+          box_inventory_id,
+          box_id,
+          product_id,
+          inventory_count,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        from
+          box_inventory
+        where
+          box_inventory_id = #{boxInventoryId}
+
+    </select>
+
+    <select id="listBoxInventoryByParam" resultType="BoxInventoryPO">
+        SELECT
+          box_inventory_id,
+          box_id,
+          product_id,
+          inventory_count,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          box_inventory
+        <trim prefix="WHERE" prefixOverrides="AND |OR">
+            <if test="boxInventoryId">
+                AND box_inventory_id = #{boxInventoryId}
+            </if>
+            <if test="boxId != null">
+                AND box_id = #{boxId}
+            </if>
+            <if test="productId != null">
+                AND product_id = #{productId}
+            </if>
+            <if test="inventoryCount != null">
+                AND inventory_count = #{inventoryCount}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+            <if test="createTime != null">
+                AND create_time = #{createTime}
+            </if>
+            <if test="lastUpdateUserId != null">
+                AND last_update_user_id = #{lastUpdateUserId}
+            </if>
+            <if test="lastUpdateTime != null">
+                AND last_update_time = #{lastUpdateTime}
+            </if>
+            <choose>
+                <when test="isDelete != null">
+                    AND is_delete =#{isDelete}
+                </when>
+                <otherwise>
+                    AND is_delete = 0
+                </otherwise>
+            </choose>
+        </trim>
+    </select>
+
+    <update id="updateBoxInventory" parameterType="BoxInventoryPO">
+        UPDATE box_inventory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="boxId != null">
+                box_id = #{boxId},
+            </if>
+            <if test="productId != null">
+                product_id = #{productId},
+            </if>
+            <if test="inventoryCount != null">
+                inventory_count =#{inventoryCount},
+            </if>
+            <if test="createUserId != null">
+                create_user_id=#{createUserId},
+            </if>
+            <if test="createTime != null">
+                create_time=#{createTime},
+            </if>
+            <if test="lastUpdateUserId != null">
+                last_update_user_id=#{lastUpdateUserId},
+            </if>
+            <if test="lastUpdateTime != null">
+                last_update_time=#{lastUpdateTime},
+            </if>
+            <if test="isDelete != null">
+                is_delete=#{isDelete},
+            </if>
+        </trim>
+        WHERE
+          box_inventory_id = #{boxInventoryId}
+    </update>
+</mapper>

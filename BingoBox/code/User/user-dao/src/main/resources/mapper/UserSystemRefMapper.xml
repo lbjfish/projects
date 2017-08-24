@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bingobox.user.dao.UserSystemRefMapper" >
+  <resultMap id="BaseResultMap" type="com.bingobox.user.po.UserSystemRef" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="sys_id" property="sysId" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, sys_id, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_system_ref
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user_system_ref
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.bingobox.user.po.UserSystemRef" >
+    insert into user_system_ref (id, user_id, sys_id)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{sysId,jdbcType=BIGINT})
+  </insert>
+ 
+  <update id="updateByPrimaryKeySelective" parameterType="com.bingobox.user.po.UserSystemRef" >
+    update user_system_ref
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="sysId != null" >
+        sys_id = #{sysId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+ 
+ 
+  <select id="selectSysIdListByUserId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select 
+    sys_id
+    from user_system_ref
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+ 
+ 
+ 
+</mapper>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bingobox.product.dao.ProductDao">
+    <!-- 目的：为DAO接口方法提供sql语句配置 -->
+    <select id="getProductById" parameterType="Long" resultType="ProductPO">
+        SELECT
+          product_id,
+          product_classification_id,
+          product_pack_dict_id,
+          product_specification,
+          product_expiration_date,
+          alarm_before_day,
+          product_producing_area,
+          product_name,
+          product_floor_price,
+          product_bar_code,
+          create_user_id,
+          create_time,
+          last_update_user_id,
+          last_update_time,
+          is_delete
+        FROM
+          product
+        WHERE
+          product_id = #{productId}
+          and is_delete = 0
+    </select>
+
+    <select id="listProductByParam" parameterType="ProductPO" resultType="ProductPO">
+        SELECT
+            product_id,
+            product_classification_id,
+            product_pack_dict_id,
+            product_specification,
+            product_expiration_date,
+            alarm_before_day,
+            product_producing_area,
+            product_name,
+            product_floor_price,
+            product_bar_code,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        FROM
+          product
+        WHERE
+        1=1
+        <if test="productId != null">
+            AND product_id = #{productId}
+        </if>
+        <if test="productClassificationId != null">
+            AND product_classification_id = #{productClassificationId}
+        </if>
+        <if test="productPackDictId != null">
+            AND product_pack_dict_id = #{productPackDictId}
+        </if>
+        <if test="productSpecification != null">
+            AND product_specification = #{productSpecification}
+        </if>
+        <if test="productExpirationDate != null">
+            AND product_expiration_date = #{productExpirationDate}
+        </if>
+        <if test="alarmBeforeDay != null">
+            AND alarm_before_day = #{alarmBeforeDay}
+        </if>
+        <if test="productProducingArea != null">
+            AND product_producing_area = #{productProducingArea}
+        </if>
+        <if test="productName != null">
+            AND product_name = #{productName}
+        </if>
+        <if test="productFloorPrice != null">
+            AND product_floor_price = #{productFloorPrice}
+        </if>
+        <if test="productBarCode != null">
+            AND product_bar_code = #{productBarCode}
+        </if>
+        <choose>
+            <when test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </when>
+            <otherwise>
+                AND is_delete = 0
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="listProductByIdList" resultType="ProductPO">
+        SELECT
+            product_id,
+            product_classification_id,
+            product_pack_dict_id,
+            product_specification,
+            product_expiration_date,
+            alarm_before_day,
+            product_producing_area,
+            product_name,
+            product_floor_price,
+            product_bar_code,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete
+        FROM
+            product
+        WHERE
+            product_id in
+        <foreach collection="list" open="(" separator="," close=")" index="index" item="item">
+            #{item}
+        </foreach>
+            and is_delete = 0
+    </select>
+
+    <insert id="saveProduct" parameterType="ProductPO" useGeneratedKeys="true" keyProperty="productId">
+        INSERT INTO product (
+            product_classification_id,
+            product_pack_dict_id,
+            product_specification,
+            product_expiration_date,
+            alarm_before_day,
+            product_producing_area,
+            product_name,
+            product_floor_price,
+            product_bar_code,
+            create_user_id,
+            create_time,
+            last_update_user_id,
+            last_update_time,
+            is_delete)
+        VALUES (
+          #{productClassificationId},
+          #{productPackDictId},
+          #{productSpecification},
+          #{productExpirationDate},
+          #{alarmBeforeDay},
+          #{productProducingArea},
+          #{productName},
+          #{productFloorPrice},
+          #{productBarCode},
+          #{createUserId},
+          #{createTime},
+          #{lastUpdateUserId},
+          #{lastUpdateTime},
+          #{isDelete})
+    </insert>
+
+    <update id="updateProduct">
+        UPDATE product
+        <trim prefix="set" suffixOverrides=",">
+          <if test="productClassificationId != null">
+              product_classification_id=#{productClassificationId},
+          </if>
+          <if test="productName != null and productName.length()>0">
+              product_name=#{productName},
+          </if>
+          <if test="productFloorPrice != null">
+              product_floor_price=#{productFloorPrice},
+          </if>
+          <if test="productBarCode != null and productBarCode.length()>0">
+              product_bar_code=#{productBarCode},
+          </if>
+          <if test="createUserId != null">
+              create_user_id=#{createUserId},
+          </if>
+          <if test="createTime != null">
+              create_time=#{createTime},
+          </if>
+          <if test="lastUpdateUserId != null">
+              last_update_user_id=#{lastUpdateUserId},
+          </if>
+          <if test="lastUpdateTime != null">
+              last_update_time=#{lastUpdateTime},
+          </if>
+          <if test="isDelete != null">
+              is_delete=#{isDelete},
+          </if>
+        </trim>
+        WHERE
+          product_id = #{productId}
+    </update>
+
+    <delete id="deleteProduct">
+        DELETE FROM product
+        WHERE product_id = #{productId}
+    </delete>
+
+
+
+</mapper>

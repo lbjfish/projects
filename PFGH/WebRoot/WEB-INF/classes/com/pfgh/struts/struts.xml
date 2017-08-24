@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<constant name="struts.objectFactory" value="spring"/>
+
+	<package name="pfgh" namespace="/" extends="json-default">
+		<action name="ty_zznlxxAction!*" class="ty_zznlxxAction" method="{1}">
+		
+			<result name="index">/pbzznl.jsp</result> 
+			
+			<result type="json" name="treegrid">
+				<param name="root">zznlxxs</param>
+			</result>
+		</action>
+		
+		<action name="pfgh_fkbAction!*" class="pfgh_FkbAction" method="{1}">
+			<result type="json" name="fkbtreegrid">
+				<param name="root">allFkb</param>
+			</result>
+			<result name="index">/fkb.jsp</result>
+		</action>
+		
+		<action name="pfgh_ZbxnAction!*" class="pfgh_ZbxnAction" method="{1}">
+			<result name="index">/zbxn.jsp</result>
+			<result name="zbsx" type="json">
+				<param name="root">zbsxList</param>
+			</result>
+			<result name="zbimg" type="json">
+				<param name="root">zbtp</param>
+			</result>
+		</action>
+		
+		<action name="pb_zzjtAction!*" class="pb_zzjtAction" method="{1}">
+			<result name="index">/zznldbfx.jsp</result>
+			<result name="bdbh" type="json">
+				<param name="root">yzbzs</param>
+			</result>
+			<result name="bdbh2" type="json">
+				<param name="root">wqsls</param>
+			</result>
+		</action>
+		
+		<action name="fkzzfxAction!*" class="fkzzfxAction" method="{1}">
+			<result name="index">/gpxq.jsp</result>
+			<result name="index2">/dkxq.jsp</result>
+			<result name="index3">/ldxq.jsp</result>
+			<result name="index0">/fkzzzy.jsp</result>
+			<result name="pzcss" type="json">
+				<param name="root">pzcss</param>
+			</result>
+			<result name="gpbh" type="json">
+				<param name="root">gpbz</param>
+			</result>
+			<result name="dkbh" type="json">
+				<param name="root">ddbz</param>
+			</result>
+			<result name="ldbh" type="json">
+				<param name="root">yjbz</param>
+			</result>
+			<result name="insgp" type="redirectAction">
+				fkzzfxAction!*index
+			</result>
+			<result name="insdd" type="redirectAction">
+				fkzzfxAction!*index2
+			</result>
+			<result name="insld" type="redirectAction">
+				fkzzfxAction!*index3
+			</result>
+			<result name="updpz" type="redirectAction">
+				fkzzfxAction!*index0
+			</result>
+		</action>
+		
+		<action name="pfgh_ty_bbfaAction!*" class="pfgh_ty_bbfaAction" method="{1}">
+			<result name="index">/fkxdfa.jsp</result>
+			<result name="select" type="json">
+				<param name="root">zzxds</param>
+			</result>
+			<result name="bwmb" type="json">
+				<param name="root">mapList</param>
+			</result>
+			<result name="bdbs" type="json">
+				<param name="root">mapList</param>
+			</result>
+			<result name="bdbs2" type="json">
+				<param name="root">bdzbs</param>
+			</result>
+			<result name="ldps" type="json">
+				<param name="root">map</param>
+			</result>
+		</action>
+		
+		<action name="tubiaoAction!*" class="tubiaoAction" method="{1}">
+			<result name="chuanzhi" type="json">
+				<param name="root">dmbws</param>
+			</result>
+			<result name="chuanzhi2" type="json">
+				<param name="root">listmap</param>
+			</result>
+		</action>
+	</package>
+</struts>

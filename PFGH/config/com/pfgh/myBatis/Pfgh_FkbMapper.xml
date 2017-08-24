@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.pfgh.dao.Pfgh_FkbDao">
+<select id="findFkb" resultType="com.pfgh.entity.Pfgh_Fkb" parameterType="string">
+	select * from PFGH_TY_ZZNLXX z
+			where z.ssbdnm = (
+				select b.bdnm from PFGH_TY_BDJZBC b
+					where b.bdmc=#{fkb}
+			)
+</select>
+<select id="findNlzblxToBdmc" resultType="string" parameterType="string">
+	select b.bdmc from PFGH_TY_BDJZBC b 
+			where b.bdnm in (
+  				select z.ssbdnm from PFGH_TY_ZZNLXX z 
+      				where z.nlzblx=#{nlzblx}
+			)
+</select>
+</mapper>

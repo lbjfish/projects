@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.pfgh.dao.Pb_zzjtDao">
+	
+	<select id="findWfbl" parameterType="int" resultMap="RM_zzjt">
+		select z.bh,z.mc,z.zy,w.sl,w.pbcd,w.hsxs,w.jtbh,w.sfzs,w.bh wbh,w.mc wmc 
+  			from pfgh_pb_zzjt z
+    			inner join pfgh_pb_wfbdcs w
+      				on z.bh = w.jtbh
+						where z.bh = '01'
+							and z.zy = #{zy}
+	</select>
+	
+	<select id="findDfbl" parameterType="int" resultMap="RM_zzjt2">
+		select z.bh,z.mc,z.zy,d.bh dbh,d.mc dmc,d.sl dsl,d.bcbl dbcbl,d.pbcd dpbcd,d.jqxs djqxs,d.qlhs dqlhs,d.khhs dkhhs,d.zjhs dzjhs,d.jtbh djtbh 
+  			from pfgh_pb_zzjt z
+          		inner join pfgh_pb_dfbdcs d
+              		on z.bh = d.jtbh
+						where z.bh = '02'
+							and z.zy = #{zy}
+	</select>
+	
+	<resultMap id="RM_zzjt" type="BasePb_zzjt">
+		<id column="bh" property="zbh"  />
+		<result property="mc" column="mc" />
+        <result property="zy" column="zy" />
+        
+     	<collection property="wfbdcs" ofType="Pb_wfbdcs">
+     		<id property="wbh" column="wbh"></id>
+     		<result property="wmc" column="wmc" />
+     		<result property="sl" column="sl" />
+     		<result property="pbcd" column="pbcd" />
+     		<result property="hsxs" column="hsxs" />
+     		<result property="jtbh" column="bh" />
+     		<result property="sfzs" column="sfzs" />
+     	</collection>
+	</resultMap> 
+	
+	<resultMap id="RM_zzjt2" type="BasePb_zzjt">
+		<id column="bh" property="zbh"  />
+		<result property="mc" column="mc" />
+        <result property="zy" column="zy" />
+        
+     	<collection property="dfbdcs" ofType="Pb_dfbdcs">
+     		<id property="bh" column="dbh"></id>
+     		<result property="mc" column="dmc" />
+     		<result property="sl" column="dsl" />
+     		<result property="bcbl" column="dbcbl" />
+     		<result property="pbcd" column="dpbcd" />
+     		<result property="jqxs" column="djqxs" />
+     		<result property="qlhs" column="dqlhs" />
+     		<result property="khhs" column="dkhhs" />
+     		<result property="zjhs" column="dzjhs" />
+     		<result property="jtbh" column="djtbh" />
+     	</collection>
+	</resultMap> 
+	
+	<select id="findByBh" resultType="hashmap" parameterType="string">
+		select wq.wqsl,wq.wqhs,wq.dyjs,wq.dyhs from pfgh_pb_wfbdcs bd 
+  		inner join pfgh_pb_wfwqpz wq 
+  		on bd.bh = wq.bdbh 
+  		where bd.bh = #{bdbh}
+	</select>
+	
+	<select id="findByBh2" resultType="string" parameterType="string">
+		select ft.wqsl from pfgh_pb_wfbdcs bd 
+  		inner join pfgh_pb_ftkcs ft
+  		on bd.bh = ft.bdbh 
+  		where bd.bh = #{bdbh}
+	</select>
+	
+	<select id="findZhs" resultType="Pfgh_pb_pbyzhs" >
+		select * from pfgh_pb_pbyzhs
+	</select>
+	
+	<select id="findJhs" resultType="Pfgh_pb_hjjhs" >
+		select * from pfgh_pb_hjjhs
+	</select>
+	
+	<select id="findBhs" resultType="Pfgh_pb_hkbhs" >
+		select * from pfgh_pb_hkbhs
+	</select>
+</mapper>

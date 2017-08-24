@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace = "com.pfgh.dao.Pfgh_Zbxn_zyDao">
+
+<select id="getZy" resultType="string" >
+	select b.zymc from pfgh_ty_zy b
+</select>
+
+<select id="getZbxhmc" resultType="string" parameterType="string">
+select a.zbxhmc from pfgh_ty_zbxh a where zbxhzy in(select zybh from pfgh_ty_zy where zymc=#{zymc})
+</select>
+
+<select id="getZyList" resultType="com.pfgh.entity.Pfgh_Zbxn_zy">
+	select * from pfgh_ty_zy
+</select>
+
+<select id="findZbxhList" resultType="com.pfgh.entity.Pfgh_Zbxn_zbxh" parameterType="string">
+select * from pfgh_ty_zbxh
+</select>
+
+<select id="findZbsxList" resultType="com.pfgh.entity.Pfgh_Zbxn_zbsx" parameterType="string">
+select * from pfgh_ty_zbsx p where p.zbxhnm=#{zbsxid}
+</select>
+
+<select id="getImg" resultType="com.pfgh.entity.Pfgh_Zbxn_tp" parameterType="string">
+select * from pfgh_ty_zbtp p where p.zbxhnm=#{zbxhnm} 
+</select>
+</mapper>

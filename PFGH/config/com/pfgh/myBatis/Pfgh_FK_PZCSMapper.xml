@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.pfgh.dao.Pfgh_FK_PZCSDao">
+	
+	<select id="findAll"  resultType="com.pfgh.entity.Pfgh_FK_PZCS" >
+		select * from PFGH_FK_PZCS
+	</select>
+	
+	<select id="findDk"  resultType="com.pfgh.entity.Pfgh_FK_DKDDBZ" >
+		select * from PFGH_FK_DKDDBZ
+	</select>
+	
+	<select id="findGp"  resultType="com.pfgh.entity.Pfgh_FK_GPBZ" >
+		select * from PFGH_FK_GPBZ
+	</select>
+	
+	<select id="findZc"  resultType="com.pfgh.entity.Pfgh_FK_ZCYJBZ" >
+		select * from PFGH_FK_ZCYJBZ
+	</select>
+	
+	<select id="findGpByBh"  resultType="Pfgh_FK_GPBZ" parameterType="string">
+		select * from PFGH_FK_GPBZ where gpbh = #{bh}
+	</select>
+	
+	<select id="findDkByBh"  resultType="Pfgh_FK_DKDDBZ" parameterType="string">
+		select * from PFGH_FK_DKDDBZ where dkddbh = #{bh}
+	</select>
+	
+	<select id="findLdByBh"  resultType="Pfgh_FK_ZCYJBZ" parameterType="string">
+		select * from PFGH_FK_ZCYJBZ where zcyjbh = #{bh}
+	</select>
+	
+	<select id="deleteAllGpxq" >
+		delete from PFGH_FK_GPXQ
+	</select>
+	
+	<insert id="insertGpxq" parameterType="Pfgh_fk_gpxq">
+		insert into pfgh_fk_gpxq values(
+			#{id},
+			#{xh},
+			#{rwbl},
+			#{hlxq},
+			#{hlmyd},
+			#{dyxq},
+			#{dymyd}
+		)
+	</insert>
+	
+	<select id="deleteAllDdxq" >
+		delete from PFGH_FK_DDXQ
+	</select>
+	
+	<insert id="insertDdxq" parameterType="Pfgh_fk_ddxq">
+		insert into pfgh_fk_ddxq values(
+			#{id},
+			#{xh},
+			#{rwbl},
+			#{hlxq},
+			#{hlmyd},
+			#{dyxq},
+			#{dymyd}
+		)
+	</insert>
+	
+	<select id="deleteAllLdxq" >
+		delete from PFGH_FK_LDXQ
+	</select>
+	
+	<insert id="insertLdxq" parameterType="Pfgh_fk_ldxq">
+		insert into pfgh_fk_ldxq values(
+			#{id},
+			#{xh},
+			#{rwbl},
+			#{ldxq},
+			#{ldmyd}
+		)
+	</insert>
+	
+	<select id="findTaskInfo"  resultType="hashmap" >
+		select y.sl,b.kxbqmc,b.bzxnzs from pfgh_fk_kxgmyc y
+		left join pfgh_fk_kxwqbz b 
+		on b.kxbqbh = y.kxbqbh
+	</select>
+	
+	<update id="updatePzcs"  >
+		update pfgh_fk_pzcs set csz = #{csz} where csbh = #{csbh}
+	</update>
+</mapper>

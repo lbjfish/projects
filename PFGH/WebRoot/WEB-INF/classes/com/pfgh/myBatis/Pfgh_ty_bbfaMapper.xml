@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.pfgh.dao.Pfgh_ty_bbfaDao">
+	
+	<select id="findFamc"  resultType="Pfgh_ty_bbfa">
+		select * from pfgh_ty_bbfa 
+	</select>
+	
+	<select id="findAllByFanm"  resultType="Pfgh_ty_zzxd" parameterType="string">
+		select bb.fanm "bbfa.fanm",bb.famc "bbfa.famc",bl.bznm "blqfbz.bznm",bl.bzmc "blqfbz.bzmc",bl.bzlb "blqfbz.bzlb",bl.sjbznm "blqfbz.sjbznm",bl.bzlx "blqfbz.bzlx",bl.fanm "blqfbz.fanm",zz.xdnm,zz.xdms,zz.xdmc,zz.xdksjd,zz.xdjsjd,zz.xdkssj,zz.xdjssj,zz.bzzt,zz.fpbzbh 
+			from pfgh_ty_bbfa bb
+ 			left join pfgh_ty_blqfbz bl
+ 			on bb.fanm = bl.fanm
+ 			left join pfgh_ty_zzxd zz
+ 			on bl.bznm = zz.fpbzbh
+			where bb.fanm = #{fanm}
+			and (bl.bzlx = '防空群' or bl.bzlx = '防空队')
+	</select>
+	
+	<select id="findMXByNm"  resultType="Pfgh_ty_bzbs" parameterType="string">
+		select bl.bznm "blqfbz.bznm",bl.bzmc "blqfbz.bzmc",bl.bzlb "blqfbz.bzlb",bl.sjbznm "blqfbz.sjbznm",bl.bzlx "blqfbz.bzlx",bl.fanm "blqfbz.fanm",bz.jdnm,bz.xdnm,bz.jbc,bz.jbl,bz.xh,bz.jd,bz.wd,bz.gd 
+		from pfgh_ty_blqfbz bl
+		left join pfgh_ty_bzbs bz
+		on bl.bznm = bz.bznm
+		where  bl.bznm = #{xdms}
+		and bz.jdnm = 'JD002'
+	</select>
+	
+	<select id="findMXByNm2"  resultType="Pfgh_ty_zysdwz" parameterType="string">
+		select zy.sdnm "zysds.sdnm",zy.sdmc "zysds.sdmc",zy.jbc "zysds.jbc",zy.jbl "zysds.jbl",zy.sdlx "zysds.sdlx",zy.sdxz "zysds.sdxz",zy.sdzt "zysds.sdzt",zy.sdystx "zysds.sdystx",zy.sdblcd "zysds.sdblcd",zy.rwjc "zysds.rwjc",wz.sdnm,wz.xh,wz.jd,wz.wd,wz.gd 
+		from Pfgh_ty_zysd zy 
+		left join pfgh_ty_zysdwz wz
+		on zy.sdnm = wz.sdnm
+		where  zy.sdnm = #{xdms}
+	</select>
+	
+	<select id="findBdByNm"  resultType="map" parameterType="string">
+		select bc.bdnm,bc.bdmc,bc.bdjb,bs.jd,bs.wd from pfgh_ty_bdjzbc bc  
+		left join pfgh_ty_zzbs bs
+		on bc.bdnm = bs.bdnm
+		where bc.bdnm in (select bd.bdnm from pfgh_ty_zzxd zz
+		left join pfgh_ty_bdbz bd
+		on bd.bznm = zz.fpbzbh
+		where bd.bzzt=1
+		and bd.fanm= #{fanm})
+		and bs.fanm = #{fanm}
+		and bs.jdnm = 'JD002'
+	</select>
+	
+	<select id="findBdzbByMc"  resultType="Pfgh_ty_bdzb" parameterType="string">
+		select * from pfgh_ty_bdzb where bzbdnm in (
+			<!-- 下次做把下面这条sql语句提出来 专门写个方法 因为下面的下面的那个方法用到了这个 为了后面好操作一对多 -->
+  			select bd.bdnm from pfgh_ty_blqfbz bl
+			left join pfgh_ty_bdbz bd
+			on bd.bznm = bl.bznm
+			left join pfgh_ty_zzxd zz
+			on bl.sjbznm = zz.fpbzbh
+			where bd.fanm = #{fanm}
+			and bd.bzzt=2
+		)
+	</select>
+	
+	<select id="findZbxhByXz"  resultType="Pfgh_ty_zbxh" parameterType="string">
+		select * from pfgh_ty_zbxh where zbxhnm = #{zbxhnm}
+	</select>
+	
+	<select id="findZzbsByJW"  resultType="Pfgh_ty_zzbs" parameterType="string">
+		select * from pfgh_ty_zzbs where bdnm = (
+		    select bd.bdnm from pfgh_ty_blqfbz bl
+			left join pfgh_ty_bdbz bd
+			on bd.bznm = bl.bznm
+			left join pfgh_ty_zzxd zz
+			on bl.sjbznm = zz.fpbzbh
+			where bd.fanm = #{fanm}
+			and bd.bzzt=2
+		) 
+		and fanm = #{fanm} and jdnm = 'JD002'
+	</select>
+	
+	<select id="findBdOneToOne"  resultType="Pfgh_ty_bdzb" >
+		select bd.bdjc "bdjdbc.bdjc",zb.zblx,zz.jd "zzbs.jd",zz.wd "zzbs.wd" from pfgh_ty_bdjzbc bd
+		left join pfgh_ty_bdzb zb
+		on bd.bdnm = zb.bzbdnm
+		left join pfgh_ty_zzbs zz
+		on zb.bzbdnm = zz.bdnm
+		where bd.bzsjbdnm = #{bzsjbdnm}
+		and zz.fanm = #{fanm} 
+		and zz.jdnm='JD002'
+	</select>
+</mapper>

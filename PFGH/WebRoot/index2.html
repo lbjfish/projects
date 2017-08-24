@@ -1,0 +1,260 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD LEVEL1//EN">
+<html>
+<head>
+<title>无名聊天室html</title>
+
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+<!--<link rel="stylesheet" type="text/css" href="./styles.css">-->
+</head>
+
+<body>
+	<div id="main_1" style="height: 500px;"></div>
+	<!-- JQuery -->
+	<script src="js/jquery-2.0.2.min.js"></script>
+	<!-- Echart -->
+	<script src="build/dist/echarts.js"></script>
+
+	<script type="text/javascript">
+		function abc(nodes,links) {
+			// 路径配置
+			require.config({
+				paths : {
+					echarts : 'build/dist'
+				}
+			});
+			var myChart;
+			// 使用
+			require([ 'echarts', 'echarts/chart/force' // 使用柱状图就加载bar模块，按需加载在resource中
+			],
+					function(ec) {
+						// 基于准备好的dom，初始化echarts图表
+						myChart = ec.init(document.getElementById('main_1'));
+
+						option = {
+							noDataLoadingOption : {
+								text : '暂无数据',
+								effect : 'bubble',
+								effectOption : {
+									effect : {
+										n : 0
+									}
+								}
+							},
+							
+							toolbox : {
+								show : true,
+								feature : {
+									saveAsImage : {
+										show : true
+									}
+								}
+							},
+							tooltip : {
+								trigger : 'item',
+								showContent : true,
+								//formatter: '{b}<br/>目标编号:{c}<br/>是否上级指定:否<br/>是否高价值:是<br/>:{d}'
+								formatter : function(params, ticket, callback) {
+									var res = "";
+									if (params.data.mbsfzp == 1
+											&& params.data.mbsfgjz == 1) {
+										res = '武器名称: ' + params.name + '<br/>'
+												+ '武器编号: ' + params.value + '<br/>'
+												+ '是否上级 : ' + '是' + '<br/>'
+												+ '是否高价值 : ' + '是';
+									} else if (params.data.mbsfzp == 0
+											&& params.data.mbsfgjz == 0) {
+										res = '武器名称: ' + params.name + '<br/>'
+												+ '武器编号: ' + params.value + '<br/>'
+												+ '是否上级 : ' + '否' + '<br/>'
+												+ '是否高价值 : ' + '否';
+									} else if (params.data.mbsfzp == 0
+											&& params.data.mbsfgjz == 1) {
+										res = '武器名称: ' + params.name + '<br/>'
+												+ '武器编号: ' + params.value + '<br/>'
+												+ '是否上级 : ' + '否' + '<br/>'
+												+ '是否高价值 : ' + '是';
+									} else if (params.data.mbsfzp == 1
+											&& params.data.mbsfgjz == 0) {
+										res = '武器名称: ' + params.name + '<br/>'
+												+ '武器编号: ' + params.value + '<br/>'
+												+ '是否上级 : ' + '是' + '<br/>'
+												+ '是否高价值 : ' + '否';
+									} 
+
+									//console.log(res);
+									/* for (var i = 0, l = params.length; i < l; i++) {
+										res += '<br/>' + params[i].seriesName + ' : ' + params[i].value;
+									} */
+									setTimeout(function() {
+										// 仅为了模拟异步回调
+										callback(ticket, res);
+									}, 0);
+									return 'loading...';
+								}
+							},
+
+							series : [ {
+								type : 'force',
+								ribbonType : false,
+								itemStyle : {
+									normal : {
+										label : {
+											show : true,
+											position : 'bottom',
+											textStyle : {
+												color : '#f00'
+											}
+										}
+									},
+									emphasis : {
+										label : {
+											show : false
+										// textStyle: null      // 默认使用全局文本样式，详见TEXTSTYLE
+										},
+										nodeStyle : {
+										//r: 30
+										},
+										linkStyle : {}
+									}
+								},
+								minRadius : 15,
+								maxRadius : 25,
+								gravity : 1.1,
+								scaling : 1.2,
+								draggable : true,
+								linkSymbol : 'arrow',
+								coolDown : 0.9,
+								preventOverlap : true,
+								//categories : {name:"dsada"},
+								gravity : 2,
+								//symbol:'auto',
+								nodes : nodes,
+								links : links
+							} ]
+						};
+						var ecConfig = require('echarts/config');
+						function focus(param) {
+							//console.log($(".echarts-tooltip").html());
+							var data = param.data;
+							//var links = option.series[0].links;
+							// console.log(link);
+							var nodes = option.series[0].nodes;
+							if (data.source != null && data.target != null) { //点击的是边
+								/* var sourceNode = nodes.filter(function(n) {
+									return n.name == data.source;
+								})[0];
+								var targetNode = nodes.filter(function(n) {
+									return n.name == data.target;
+								})[0];
+								data.itemStyle = {
+									normal : {
+										width : 0,
+										color : 'rgba(255,0,0,0)'
+									}
+								};
+								console.log(data);
+								myChart.setOption(option);
+								console.log("选中了边 " + sourceNode.name + ' --> '
+										+ targetNode.name + ' (' + data.weight
+										+ ')'); */
+
+							} else { // 点击的是点
+								data.ignore = true;
+								console.log(data);
+								myChart.setOption(option);
+								console.log("选中了" + data.name + '('
+										+ data.value + ')');
+							}
+						}
+						myChart.on(ecConfig.EVENT.DBLCLICK, focus);
+
+						/* myChart.on(ecConfig.EVENT.FORCE_LAYOUT_END, function () {
+						    console.log(myChart.chart.force.getPosition());
+						}); 
+						 */
+						myChart.setTheme('macarons');
+						// 为echarts对象加载数据 
+						myChart.setOption(option);
+
+					});
+		}
+
+		$(function(){
+			function getAjax(){
+				var defer = $.Deferred();
+				$.ajax({
+					url : "tubiaoAction!*chuanzhi",
+					async : false,
+					success : function(data){
+						defer.resolve(data);
+					}
+				});
+				return defer.promise();
+			}
+			
+			function getAjax2(){
+				var defer2 = $.Deferred();
+				$.ajax({
+					url : "tubiaoAction!*chuanzhi2",
+					async : false,
+					success : function(data2){
+						defer2.resolve(data2);
+					}
+				});
+				return defer2.promise();
+			}
+			
+			$.when(getAjax(),getAjax2()).done(function(data,data2){
+				var nodes = [];
+				var links = [];
+				for(var i=0;i<data.length;i++){
+					if(data[i].mbbh == '4'){
+						var node = {};
+						var normal = {};
+						normal.width = 1.5;
+						normal.color = 'red';
+						
+						node.category = 0;
+						node.name = data[i].mbmc;
+						node.value = data[i].mbbh;
+						node.symbol = 'star';
+						node.symbolSize = 50;
+						node.itemStyle = {};
+						node.itemStyle.normal = normal;
+						//node.initial = [1000,250];
+						node.fixX = true;
+						node.fixY = true;
+						node.mbsfzp = data[i].mbsfzp;
+						node.mbsfgjz = data[i].mbsfgjz;
+						nodes.push(node);
+					}else{
+						var node = {};
+						node.category = 1;
+						node.name = data[i].mbmc;
+						node.value = data[i].mbbh;
+						node.symbol = 'circle';
+						node.symbolSize = 20;
+						//node.initial = [970,60];
+						node.fixX = true;
+						node.fixY = true;
+						node.mbsfzp = data[i].mbsfzp;
+						node.mbsfgjz = data[i].mbsfgjz;
+						nodes.push(node);
+					}
+				}
+				
+				for(var i=0;i<data2.length;i++){
+					var link = {};
+					link.source = data2[i].mc1;
+					link.target = data2[i].mc2;
+					links.push(link);
+				}
+				//console.log(nodes);
+				abc(nodes,links);
+			});
+		});
+			
+	</script>
+</body>
+</html>

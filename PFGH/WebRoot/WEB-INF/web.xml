@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
+  <display-name>struts_spring_mybatis</display-name>
+  
+   <filter>
+    <filter-name>struts2-prepare</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareFilter</filter-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>struts-default.xml,struts-plugin.xml,com/pfgh/struts/struts.xml</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2-prepare</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+ 
+  <filter>
+    <filter-name>struts2</filter-name>
+    <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsExecuteFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>struts2</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  
+  
+  <listener>
+    <listener-class>
+                 org.springframework.web.context.ContextLoaderListener
+    </listener-class>
+  </listener>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:com/pfgh/spring/spring-*.xml,classpath*:com/pfgh/spring/*/spring-*.xml</param-value>
+  </context-param>
+  
+  <!-- 从配置文件（env.properties）中，动态获取的类 -->
+  <context-param>
+    <param-name>startupListeners</param-name>
+    <param-value>com.pfgh.pathUtil.SysconfigInitListener</param-value>
+  </context-param>
+  <!-- 从配置文件（env.properties）中，动态获取的监听器 -->
+  <listener>
+    <listener-class>com.pfgh.pathUtil.listener.BootstrapListener</listener-class>
+  </listener>
+  
+  
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

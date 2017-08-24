@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/detail/detail.iml" filepath="$PROJECT_DIR$/detail/detail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/edas-demo-carshop.iml" filepath="$PROJECT_DIR$/edas-demo-carshop.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itemcenter/itemcenter.iml" filepath="$PROJECT_DIR$/itemcenter/itemcenter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/itemcenter-api/itemcenter-api.iml" filepath="$PROJECT_DIR$/itemcenter-api/itemcenter-api.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.tarena.dao.ClassesMapper">
+	
+	<!-- 总结：在任何时候（不管是OneToOne还是OneToMany）都可用用OneToMany,因为一对多，如果多方只有一个，
+		 自动就会变成一对一。
+	-->
+	 
+	<!-- OneToOne最简写法（推荐 强力推荐）因为不需要写resultMap --> 
+ 	<select id="findClaId" resultType="com.tarena.entity.Classes" parameterType="int">
+		<!-- teacher.t_id 和 teacher.t_name里的teacher代表映射到另一个类中 -->
+		select c.ca_id, c.ca_name, t.t_id "teacher.t_id", t.t_name "teacher.t_name" 
+			from classes c
+			inner join teacher t
+				on c.t_id=t.t_id 
+					where c.t_id=#{tid}
+	</select> 
+	 
+	<!-- OneToOne两种方法建议用第一种 -->
+	<!-- OneToOne方法一 -->
+<!-- 	 <resultMap id="RM_class" type="com.tarena.entity.Classes">
+        <id column="ca_id" property="ca_id"  />
+        result全部对应的数据库字段都必须写
+        <result property="ca_name" column="ca_name" />
+        <result property="t_id" column="t_id" />
+     	<association property="teacher" javaType="com.tarena.entity.Teacher">
+     		<id property="t_id" column="t_id"></id>
+     		result全部对应的数据库字段都必须写
+     		<result property="t_name" column="t_name" />
+     	</association>
+	</resultMap>
+	
+	<select id="findClaId" resultMap="RM_class" parameterType="int">
+		select c.ca_id, c.ca_name, t.t_id, t.t_name 
+			from classes c,teacher t 
+				where c.t_id=t.t_id 
+					and c.t_id=#{tid}
+	</select>  -->
+	
+	<!-- OneToOne方法二 -->
+	<!-- <resultMap id="RM_class" type="com.tarena.entity.Classes">
+		<id column="ca_id" property="ca_id" />
+		 result不用写，但是外键或者另一个表的id则必须写，否则为null
+        <result property="ca_name" column="ca_name" />
+        <result property="t_id" column="t_id" />
+        <association property="teacher" column="t_id" select="findTeaId">
+        	result不用写
+        </association>
+	</resultMap>
+	
+	<select id="findClaId" resultMap="RM_class" parameterType="int">
+		select * from classes where t_id=#{tid}
+	</select>
+	
+	<select id="findTeaId" resultType="com.tarena.entity.Teacher" parameterType="int">
+		里面t_id允许乱打
+		select * from teacher where t_id=#{tid}
+	</select> -->
+	
+	<!-- OneToMany两种方法建议用第二种（其实都行，第二种好理解） -->
+	<!-- OneToMany方法一 -->
+	<select id="findClaId2" parameterType="int" resultMap="RM_class2">
+		select * 
+			from classes c, teacher t, student s 
+				where c.t_id=t.t_id 
+					and c.ca_id=s.ca_id 
+					and c.ca_id=#{cid2}
+	</select>
+ 	<resultMap id="RM_class2" type="com.tarena.entity.Classes">
+		<id column="ca_id" property="ca_id"  />
+		<result property="ca_name" column="ca_name" />
+        <result property="t_id" column="t_id" />
+        <association property="teacher" javaType="com.tarena.entity.Teacher">
+     		<id property="t_id" column="t_id"></id>
+     		<!-- result全部对应的数据库字段都必须写 -->
+     		<result property="t_name" column="t_name" />
+     	</association>
+     	<collection property="stus" ofType="com.tarena.entity.Student">
+     		<id property="s_id" column="s_id"></id>
+     		<result property="s_name" column="s_name" />
+     		<result property="ca_id" column="ca_id" />
+     	</collection>
+	</resultMap> 
+	
+	<!-- OneToMany方法二 -->
+	<!-- <select id="findClaId2" parameterType="int" resultMap="RM_class2">
+		select * from classes where ca_id=#{cid2}
+	</select>
+	<resultMap id="RM_class2" type="com.tarena.entity.Classes" >
+		<id column="ca_id" property="ca_id"  />
+        <result property="ca_name" column="ca_name" />
+        <result property="t_id" column="t_id" />
+        <association property="teacher" column="t_id" select="findTeaId2">
+        	result不用写
+        </association>
+        <collection property="stus" ofType="com.tarena.entity.Student" column="ca_id" select="findStuId">
+        </collection>
+    </resultMap>
+    <select id="findTeaId2" parameterType="int" resultType="com.tarena.entity.Teacher">
+    	里面t_id允许乱打
+       	select * from teacher where t_id=#{sadas}
+    </select>
+        
+    <select id="findStuId" parameterType="int" resultType="com.tarena.entity.Student">
+    	里面ca_id允许乱打
+       	select * from student where ca_id=#{cid2}
+    </select> -->
+
+</mapper>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.tarena.dao.ServiceMapper">
+	<select id="findByPage" resultType="hashmap" parameterType="com.tarena.entity.page.ServicePage">
+	select * from
+		(select rownum rn,t.* from
+		 	(select s.*,a.idcard_no,a.real_name,c.name,c.descr
+	   	from service_lee s
+			inner join account_lee a
+			on a.account_id=s.account_id
+			inner join cost_lee c
+			on c.cost_id=s.cost_id
+			<where>
+				<if test="osUserName!=null &amp;&amp; !osUserName.equals('')">
+					and s.os_username=#{osUserName}
+				</if>
+				<if test="unixHost!=null &amp;&amp; !unixHost.equals('')">
+					and s.unix_host=#{unixHost}
+				</if>
+				<if test="idcardNo!=null &amp;&amp; !idcardNo.equals('')">
+					and a.idcard_no=#{idcardNo}
+				</if>
+				<if test="status!=null &amp;&amp; !status.equals('') &amp;&amp; !status.equals('-1')">
+					and s.status=#{status}
+				</if>
+		   </where>
+		   order by s.service_id) t)
+		   where rn between #{start} and #{end}
+	</select>
+	
+	<select id="findByRow" resultType="int" parameterType="com.tarena.entity.page.ServicePage" >
+		select count(service_id) 
+		from service_lee s
+		inner join account_lee a
+		on a.account_id=s.account_id
+		inner join cost_lee c
+		on c.cost_id=s.cost_id
+		<where>
+				<if test="osUserName!=null &amp;&amp; !osUserName.equals('')">
+					and s.os_username=#{osUserName}
+				</if>
+				<if test="unixHost!=null &amp;&amp; !unixHost.equals('')">
+					and s.unix_host=#{unixHost}
+				</if>
+				<if test="idcardNo!=null &amp;&amp; !idcardNo.equals('')">
+					and a.idcard_no=#{idcardNo}
+				</if>
+				<if test="status!=null &amp;&amp; !status.equals('') &amp;&amp; !status.equals('-1')">
+					and s.status=#{status}
+				</if>
+		</where>
+	</select>
+	
+	<update id="start" parameterType="int">
+		update service_lee 
+		set status='0',pause_date=null
+		where service_id=#{id}
+	</update>
+	
+	<update id="pause" parameterType="int">
+		update service_lee 
+		set status='1',pause_date=sysdate
+		where service_id=#{id}
+	</update>
+	
+	<select id="findById" resultType="com.tarena.entity.Service" parameterType="int">
+		select * from service_lee where service_id=#{id}
+	</select>
+	
+	<!-- pauseByAccount -->
+	<update id="pauseByAccount" parameterType="int">
+		update service_lee 
+		set status='1',pause_date=sysdate
+		where account_id=#{accountId}
+	</update>
+	
+	<select id="findAll" resultType="hashmap">
+		select * from service_lee
+	</select>
+	<!-- 
+	<insert id="updateName" parameterType="java.util.Map">
+		insert into service_update_bak_lee
+		values(seq_service_update_bak_lee.nextval,
+		#{service_id,jdbcType=INTEGER},#{cost_id,jdbcType=INTEGER})
+	</insert>
+	 -->
+	 
+	 <update id="updateName2" parameterType="hashmap">
+	 	update service_lee 
+	 	set cost_id=#{cost}
+	 	where service_id=#{service_id}
+	 </update>
+</mapper>

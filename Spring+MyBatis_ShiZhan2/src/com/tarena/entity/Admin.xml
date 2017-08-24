@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.tarena.dao.AdminMapper">
+	<select id="findByPage" resultMap="adminMap" parameterType="com.tarena.entity.page.AdminPage">
+	select * from
+		(select rownum rn,t.* from
+			(select * from admin_info_lee 
+				where admin_id in(
+					select a.admin_id from admin_info_lee a
+						left join admin_role_lee ar
+							on a.admin_id=ar.admin_id
+						left join role_info_lee r
+							on ar.role_id=r.role_id
+						left join role_module_lee rm
+							on r.role_id=rm.role_id
+						left join module_info_lee m
+							on rm.module_id=m.module_id
+					<where>
+						<if test="moduleId!=null">
+							and m.module_id=#{moduleId}
+						</if>
+						<if test="roleName!=null &amp;&amp; !roleName.equals('')" >
+							and r.name like '%'||#{roleName}||'%'
+						</if>
+					</where>
+							)
+					order by admin_id) t)
+	where rn between #{start} and #{end}
+	</select>
+	<select id="findRoles" parameterType="int" resultType="com.tarena.entity.Role">
+		select *
+		from role_info_lee
+		where role_id in(select role_id
+								from admin_role_lee
+									where admin_id=#{admin_id})
+	</select>
+	<resultMap id="adminMap" type="com.tarena.entity.Admin">
+		<id column="admin_id" property="admin_id" />
+		<collection property="roles" javaType="arrayList" ofType="com.tarena.entity.Role" column="admin_id" select="findRoles">
+		</collection>
+	</resultMap>
+	
+	<select id="findByRow" resultType="int" parameterType="com.tarena.entity.page.AdminPage">
+		select count(admin_id) from admin_info_lee
+		where admin_id in(
+					select a.admin_id from admin_info_lee a
+						left join admin_role_lee ar
+							on a.admin_id=ar.admin_id
+						left join role_info_lee r
+							on ar.role_id=r.role_id
+						left join role_module_lee rm
+							on r.role_id=rm.role_id
+						left join module_info_lee m
+							on rm.module_id=m.module_id
+					<where>
+						<if test="moduleId!=null">
+							and m.module_id=#{moduleId}
+						</if>
+						<if test="roleName!=null &amp;&amp; roleName.equals('')" >
+							and r.name like '%'||#{roleName}||'%'
+						</if>
+					</where>
+					)
+	</select>
+	
+	<!-- updatePassword -->
+	<update id="updatePassword" parameterType="hashmap">
+		update admin_info_lee 
+		set password=#{password}
+		where admin_id in 
+		<foreach collection="ids" item="id"
+			open="(" close=")" separator=",">
+			#{id}
+		</foreach>		
+	</update>
+	
+	<select id="findAllRole" resultType="com.tarena.entity.Role">
+		select * from role_info_lee
+	</select>
+	
+	<insert id="save" parameterType="com.tarena.entity.Admin">
+		<selectKey keyProperty="admin_id" resultType="int" order="BEFORE">
+			select admin_seq_lee.nextval from dual
+		</selectKey>
+		insert into admin_info_lee
+		values(#{admin_id},
+				 #{admin_code,jdbcType=VARCHAR},
+				 #{password,jdbcType=VARCHAR},
+				 #{name,jdbcType=VARCHAR},
+				 #{telephone,jdbcType=VARCHAR},
+				 #{email,jdbcType=VARCHAR},
+				 sysdate)
+	</insert>
+	
+	<insert id="saveAdminRole" parameterType="com.tarena.entity.AdminRole">
+		insert into admin_role_lee
+		values(#{admin_id},#{role_id})
+	</insert>
+	
+	<select id="findById" resultMap="adminMap" parameterType="int">
+		select * from admin_info_lee where admin_id=#{id}
+	</select>
+	
+	<update id="updateAdmin" parameterType="com.tarena.entity.Admin">
+		update admin_info_lee
+		set name=#{name,jdbcType=VARCHAR},
+			 telephone=#{telephone,jdbcType=VARCHAR},
+			 email=#{email,jdbcType=VARCHAR}
+		where admin_id=#{admin_id}
+	</update>
+	
+	<delete id="deleteAdminRole" parameterType="int">
+		delete from admin_role where admin_id=#{adminId}
+	</delete>
+	
+	<!-- findByCode -->
+	<select id="findByCode" parameterType="string" resultType="com.tarena.entity.Admin">
+		select * from admin_info_lee
+		where admin_code=#{adminCode}
+	</select>
+	
+	<!-- findModuleByAdmin -->
+	<select id="findModuleByAdmin" parameterType="int" resultType="com.tarena.entity.Module">
+		select * from module_info_lee 
+		where module_id in(
+			select rm.module_id
+			from admin_info_lee a
+			inner join admin_role_lee ar
+			on a.admin_id = ar.admin_id
+			inner join role_info_lee r
+			on ar.role_id = r.role_id
+			inner join role_module_lee rm
+			on r.role_id = rm.role_id
+			where a.admin_id = #{id}
+		)
+		order by module_id
+	</select>
+</mapper>

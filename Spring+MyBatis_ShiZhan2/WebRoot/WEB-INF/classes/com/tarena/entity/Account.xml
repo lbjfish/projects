@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.tarena.dao.AccountMapper">
+	<select id="findByPage" resultType="com.tarena.entity.Account" parameterType="com.tarena.entity.page.AccountPage" >
+		select * from(
+			select rownum rn,t.* from(
+				select * from account_lee
+				<where>
+					<!-- 搜索条件不为null并且不为""时，拼入SQL -->
+					<if test="idcardNo!=null &amp;&amp; !idcardNo.equals('')">
+						and idcard_no=#{idcardNo}
+					</if>
+					<if test="realName!=null &amp;&amp; !realName.equals('')">
+						and real_name=#{realName}
+					</if>
+					<if test="loginName!=null &amp;&amp; !loginName.equals('')">
+						and login_name=#{loginName}
+					</if>
+					<!-- 状态为-1时代表全部，应该不拼入SQL，所以
+						在条件中需要加上status!=-1。
+						注意内层有双引号，外层改为单引号。 -->
+					<if test="status!=null &amp;&amp; !status.equals('') &amp;&amp; !status.equals('-1')">
+						and status=#{status}
+					</if>
+				</where> 
+				order by account_id) t)
+		where rn between #{start} and #{end}
+	</select>
+	
+	<select id="findByRow" resultType="int" >
+		select count(account_id) from account_lee
+		<where>
+					<!-- 搜索条件不为null并且不为""时，拼入SQL -->
+					<if test="idcardNo!=null &amp;&amp; !idcardNo.equals('')">
+						and idcard_no=#{idcardNo}
+					</if>
+					<if test="realName!=null &amp;&amp; !realName.equals('')">
+						and real_name=#{realName}
+					</if>
+					<if test="loginName!=null &amp;&amp; !loginName.equals('')">
+						and login_name=#{loginName}
+					</if>
+					<!-- 状态为-1时代表全部，应该不拼入SQL，所以
+						在条件中需要加上status!=-1。
+						注意内层有双引号，外层改为单引号。 -->
+					<if test='status!=null &amp;&amp; !status.equals("") &amp;&amp; !status.equals("-1")'>
+						and status=#{status}
+					</if>
+				</where> 
+	</select>
+
+	<!-- pause -->
+	<update id="pause" parameterType="int">
+		update account_lee set status='1',pause_date=sysdate 
+		where account_id=#{id}
+	</update>
+	<!-- start -->
+	<update id="start" parameterType="int">
+		update account_lee set status='0',pause_date=null
+		where account_id=#{id}
+	</update>
+	<!-- delete -->
+	<update id="delete" parameterType="int">
+		update account_lee set status='2',close_date=sysdate
+		where account_id=#{id}
+	</update>
+	
+	<select id="findById" resultType="com.tarena.entity.Account" parameterType="int">
+		select * from account_lee where account_id=#{id}
+	</select>
+	
+	<select id="findByIdcardNo" resultType="hashmap" parameterType="java.lang.String">
+		select * from account_lee where idcard_no=#{idcardNo} 
+	</select>
+	
+	<update id="updateAccount" parameterType="com.tarena.entity.Account">
+		update account_lee 
+		set 
+		telephone=#{telephone}
+		where account_id=#{account_id}
+	</update>
+</mapper>

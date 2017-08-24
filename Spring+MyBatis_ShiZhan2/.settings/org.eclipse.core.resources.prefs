@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/com/tarena/entity/Admin.java=gbk
+encoding//src/com/tarena/entity/Role.java=gbk
+encoding//src/com/tarena/interceptor/CheckLoginInterceptor.java=gbk
+encoding//src/com/tarena/util/ImageUtil.java=gbk
+encoding//src/com/tarena/web/LoginController.java=gbk
+encoding/<project>=UTF-8

@@ -1,0 +1,22 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	function f1(e){
+		//e:事件对象
+		//作用1：找到事件源  srcElement
+		//target针对非IE浏览器（如：火狐，谷歌）,srcElement针对IE浏览器,任何浏览器都支持就加或（||）
+		var obj = e.target || e.srcElement;
+		obj.innerHTML = '<p>hello jQuery</p>';
+		
+		alert(e.clientX + ":" + e.clientY);
+		
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<a href="javascript:;" onclick="f1(event);">Click1</a>
+	<a href="javascript:;" onclick="f1(event);">Click2</a>	
+</body>
+</html>

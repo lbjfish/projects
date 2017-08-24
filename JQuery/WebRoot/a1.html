@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "">
+<html>
+	<head>
+		<title>Dom1.html</title>
+
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+	body{
+		margin:0px;
+		padding:0px;
+	}
+	#d1{
+		width:190px;
+		height:190px;
+		position:absolute; 
+		left:20px;
+		top:30px;
+	}
+	
+	</style>
+		<script type="text/javascript" src="js/jquery-1.4.3.js"></script>
+		<script type="text/javascript">
+	$(function(){
+		$('#d1').click(f1);
+		
+		});
+		
+		function f1(){	
+		$(this).slideDown(1000,f2);//括号里是速度和回调函数
+		};
+
+		function f2(){
+		$(this).animate({'left':'600px'},3000);
+		$(this).slideUp(1000,f3);
+		};
+	   
+		function f3(){	
+		$(this).fadeIn(1000,f4);//括号里是速度和回调函数
+		};
+
+		function f4(){
+		$(this).animate({'top':'450px'},3000);
+		$(this).slideUp(1000);
+		$(this).fadeIn(1000,f5);
+		};
+
+      function f5(){
+       $(this).animate({'left':'0'},3000,f6);
+    	}
+    	
+    	function f6(){
+    	$(this).animate({'top':'0'},3000);
+    	$(this).fadeOut(1000,f1);
+    	}
+	</script>
+	</head>
+
+	<body>
+	
+		<img id="d1"  src="510.jpg" />
+		
+		
+	</body>
+</html>

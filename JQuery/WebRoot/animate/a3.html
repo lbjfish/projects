@@ -1,0 +1,54 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+	body,div{
+		margin:0px;
+		padding:0px;
+	}
+	#d1{
+		width:100px;
+		height:100px;
+		background-color:red;
+		left:20px;
+		top:30px;
+		position:absolute;
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.3.js">
+</script>
+<script type="text/javascript">
+	$(function(){
+		$('#d1').click(function(){
+			//动画队列
+			//1.
+			//回调函数放在速度后面
+			$(this).animate({'left':'500px'},5000,function(){
+			                                                 $('#d1').css('background-color','#00f')
+			                                                                 });
+			$(this).animate({'top':'250px'},2000,function(){
+			                                                 $('#d1').css('background-color','#f00')
+			                                                               });
+			$(this).fadeOut('slow');
+			
+			//2.
+			/*
+			$(this).animate({'left':'500px','top':'250px'},2000);
+			//$(this).animate({'top':'250px'},1000);
+			$(this).fadeOut('slow');
+			*/
+			//3.
+			//链接写法
+			//$(this).animate({'left':'500px'},5000).animate({'top':'250px'},2000).fadeOut();
+		});
+	});
+	
+	
+</script>
+</head>
+<body style="font-size:30px;">
+		<div id="d1"></div>
+
+</body>
+</html>

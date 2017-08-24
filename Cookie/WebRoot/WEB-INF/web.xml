@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" 
+	xmlns="http://java.sun.com/xml/ns/j2ee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd" id="WebApp_ID">
+	<display-name>Cookie</display-name>
+ 
+  <servlet>
+    <servlet-name>AddCookieDemo</servlet-name>
+    <servlet-class>day06.AddCookieDemo</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>FindCookieServlet</servlet-name>
+    <servlet-class>day06.FindCookieServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>test</servlet-name>
+    <servlet-class>day06.test</servlet-class>
+  </servlet>
+ <servlet>
+    <servlet-name>test2</servlet-name>
+    <servlet-class>day06.test2</servlet-class>
+  </servlet>
+
+
+
+  <servlet-mapping>
+    <servlet-name>AddCookieDemo</servlet-name>
+    <url-pattern>/AddCookieDemo</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>FindCookieServlet</servlet-name>
+    <url-pattern>/FindCookieServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>test</servlet-name>
+    <url-pattern>/test</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>test2</servlet-name>
+    <url-pattern>/test2</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+  	<welcome-file>index.html</welcome-file>
+  	<welcome-file>index.htm</welcome-file>
+  	<welcome-file>index.jsp</welcome-file>
+  	<welcome-file>default.html</welcome-file>
+  	<welcome-file>default.htm</welcome-file>
+  	<welcome-file>default.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>

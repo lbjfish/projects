@@ -1,0 +1,33 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" 
+src="../js/jquery-1.4.3.js">
+</script>
+<script type="text/javascript">
+	$(fn);
+	function fn(){
+		$('a').click(f1);
+	}
+	function f1(e){
+		var obj = e.target||e.srcElement;
+		//下面有三种写法
+		//1.(jQuery方法)
+		$(obj).html('hello jQuery');
+		//2.(jQuery方法)
+		$(this).html('hello jQuery');
+		//3.(dom写法)
+		obj.innerHTML('hello jQuery');
+	}
+	
+	function f2(e){
+		alert(e.pageX + ' : ' + e.pageY);
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<a href="javascript:;" >ClickMe</a><br/>
+	<a href="javascript:;" >ClickYou</a>
+</body>
+</html>

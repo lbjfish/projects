@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="struts+OGNL"
+  id="myeclipse.1416532007219"
+  context-root="/struts+OGNL"
+  j2ee-spec="5.0"
+  archive="struts+OGNL.war">
+  <attributes>
+    <attribute name="webrootdir" value="/WebRoot" />
+  </attributes>
+</project-module>
+

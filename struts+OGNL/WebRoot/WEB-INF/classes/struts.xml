@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.1.7//EN"
+    "http://struts.apache.org/dtds/struts-2.1.7.dtd">
+
+<struts>
+
+	<!-- 
+		配置文件要配置2个内容：
+		1.请求如何找到对应的Action及方法；
+		  通过package和action元素实现
+	http://localhost:8080/struts/demo/hello.action(.action是固定的，不能写.do或.form，也可省略.action)
+		2.Action的方法对应哪个页面。
+		  通过result元素实现。
+		
+		请求访问Action的步骤：
+		1.请求发给Filter
+		2.Filter读取URL访问部署的项目/StrutsDay01
+		3.Filter读取URL中部署项目名的下级路径/demo，然后
+			从struts.xml中寻找namespace="/demo"的
+			package元素。
+		4.Filter读取URL中/demo的下级路径/hello.action，
+			然后从struts.xml中上述package元素下找
+			name="hello"的action元素。
+		5.Filter根据action元素上声明的类名去实例化Action，
+			并根据元素上声明的方法名去调用方法。
+		6.当Action的方法执行结束时，Filter会使用返回
+			的字符串在上述action元素下找name="返回值"
+			的result，并从result中读取出要转发的页面，
+			将请求转发。
+	 -->
+
+	<!-- 
+		package可以将action元素打包，让配置文件的结构更
+		清晰，一般情况下一个模块的配置放到一个package下；
+		name是package的名称； (随便写什么都行 反正不报错)
+		namespace是package的部署名，必须以/开头；
+		extends是继承关系，指的是当前的package继承于
+		struts-default，相当于将struts-default这个
+		package下所有的配置信息复制到了当前的package下。
+	 -->
+	<package name="day01" namespace="/demo" extends="struts-default">
+		<!-- 
+			action元素用于声明Action类；
+			name是action元素名，用于请求访问，
+			类似于@RequestMapping中声明的字符串；
+			class是Action的类名；
+			method是要调用的方法名。
+		 -->
+		<action name="hello" class="com.tarena.action.HelloAction" method="sayHello">
+			<!-- 
+				result用于将请求转发给JSP。
+				name用于匹配Action类中业务方法的返回值，
+				Struts2会根据返回值找到匹配的这个result。
+				result元素中，声明了要转发的页面。
+			 -->
+			<result name="ok">
+				/WEB-INF/jsp/hello.jsp
+			</result>
+		</action>
+	</package>
+
+</struts>

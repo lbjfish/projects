@@ -1,0 +1,32 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<style>
+	#d1{
+		width:350px;
+		height:40px;
+		background-color:#fff8dc;
+		border:1px soild red;
+		display:none;
+	}
+</style>
+<script type="text/javascript" src="../js/jquery-1.4.3.js"></script>
+<script type="text/javascript">
+	$(fn);
+	function fn(){
+		$('#a1').toggle(function(){
+			//$('#d1').show(900);
+			$('#d1').slideDown(1000);
+		},function(){
+			//$('#d1').hide('slow');
+			$('#d1').slideUp(1000);
+		});
+	}
+</script>
+</head>
+<body style="font-size:30px;">
+	<a href="javascript:;"  id="a1">李白是谁</a>
+	<div id="d1" >中国伟大的浪漫主义诗人</div>
+</body>
+</html>

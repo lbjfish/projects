@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		class元素设置了对象和表的关系；
+		name指定了对象的类型名；
+		table指定了表名；
+	 -->
+	<class name="com.tarena.entity.Cost" table="cost_lee">
+		<!-- 
+			id元素设置了主键字段和属性的对应关系；
+			name指定了属性名；
+			column指定了字段名；
+			type指定了属性和字段转换时需要的类型；
+		 -->
+		<id name="cost_id" type="integer" column="cost_id">
+			<!-- 用来指明主键的生成方式 -->
+			<generator class="sequence">
+				<param name="sequence">
+					cost_seq
+				</param>
+			</generator>
+		</id>
+		<!-- 
+			property设置了普通字段和属性的关系；
+			name指定了属性名；
+			column指定了字段名
+			type指定了转换的类型；
+		 -->
+		<property name="name" type="string" column="name" />
+		<property name="base_duration" type="integer" column="base_duration" />
+		<property name="base_cost" type="double" column="base_cost" />
+		<property name="unit_cost" type="double" column="unit_cost"/>
+		<property name="status" type="string" column="status" />
+		<property name="descr" type="string" column="descr" />
+		<property name="creatime" type="timestamp" column="creatime" />
+		<property name="startime" type="timestamp" column="startime" />
+		<property name="cost_type" type="string" column="cost_type" />
+	</class>
+</hibernate-mapping>
